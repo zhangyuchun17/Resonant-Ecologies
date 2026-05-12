@@ -1,0 +1,675 @@
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  background: #ffffff;
+}
+
+/* ── Map ────────────────────────────────────────────────────────────────── */
+
+#map {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+}
+
+/* ── Intro overlay ──────────────────────────────────────────────────────── */
+
+#intro {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8vw;
+  transition: opacity 0.6s ease;
+}
+
+#top-link {
+  position: fixed;
+  top: 1.75rem;
+  right: 2rem;
+  z-index: 65;
+}
+
+#about-link {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  color: #1a1a1a;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease, text-decoration 0.2s ease, opacity 0.2s ease;
+}
+
+#about-link:hover {
+  text-decoration: underline;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(200, 200, 200, 0.55);
+  border-radius: 20px;
+  padding: 3rem 3.5rem;
+  max-width: 460px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.7s ease forwards;
+}
+
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2rem;
+}
+
+.lang-sep {
+  font-size: 9px;
+  color: #bbbbbb;
+}
+
+.lang-btn {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  font-weight: 400;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #aaaaaa;
+  transition: color 0.2s;
+}
+
+.lang-btn.active { color: #1a1a1a; }
+.lang-btn:hover  { color: #555555; }
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: #1a1a1a;
+  margin-bottom: 1.25rem;
+  line-height: 1.3;
+}
+
+.subtitle {
+  font-size: 0.68rem;
+  font-weight: 300;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: #555555;
+  margin-bottom: 1.75rem;
+  white-space: pre-line;
+}
+
+.divider {
+  width: 28px;
+  height: 1px;
+  background: #cccccc;
+  margin-bottom: 1.5rem;
+}
+
+.method {
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: #999999;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+
+.enter-btn {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: #1a1a1a;
+  background: transparent;
+  border: 1px solid #1a1a1a;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.enter-btn:hover {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+/* ── Map labels ─────────────────────────────────────────────────────────── */
+
+.location-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.label-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.label-text {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 8.5px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: #1a1a1a;
+  transition: opacity 0.2s;
+}
+
+.location-label:hover .label-dot  { transform: scale(2.2); }
+.location-label:hover .label-text { opacity: 0.45; }
+
+/* ── Border labels ──────────────────────────────────────────────────────── */
+
+.border-label {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 8px;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: #bbbbbb;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  user-select: none;
+}
+
+/* ── Map hint ───────────────────────────────────────────────────────────── */
+
+.map-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 8px;
+  font-weight: 300;
+  letter-spacing: 0.26em;
+  color: #bbbbbb;
+  pointer-events: none;
+  animation: fadeIn 2s ease forwards;
+}
+
+/* ── Location overlay ───────────────────────────────────────────────────── */
+
+#location-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#location-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-panel {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  border-radius: 20px;
+  padding: 2rem 2.5rem 2.5rem;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.overlay-title-group { flex: 1; min-width: 0; }
+
+.overlay-watershed {
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: #aaaaaa;
+  font-weight: 300;
+  text-transform: lowercase;
+  margin-bottom: 0.4rem;
+}
+
+.overlay-name {
+  font-size: 1.05rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
+  margin-bottom: 0.7rem;
+  line-height: 1.3;
+}
+
+.overlay-desc {
+  font-size: 0.62rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: #666666;
+  letter-spacing: 0.04em;
+}
+
+.overlay-close-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 300;
+  color: #999999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.overlay-close-btn:hover { color: #1a1a1a; }
+
+/* ── Video grid — three equal columns, stable layout ───────────────────── */
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  padding: 0.25rem 0 0.5rem;
+}
+
+/* ── Video card ─────────────────────────────────────────────────────────── */
+
+.video-card {
+  display: flex;
+  flex-direction: column;
+  /* Transition only for active expansion — no hover-triggered movement */
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity  0.4s ease;
+  position: relative;
+}
+
+/* Active card: subtle expansion to signal "this channel is open" */
+.video-card.active {
+  transform: scale(1.025);
+  z-index: 2;
+}
+
+/* Neighbors: almost imperceptible step back — keeps focus without compression */
+.video-card.inactive-neighbor {
+  transform: scale(0.985);
+  opacity: 0.82;
+}
+
+/* 16:9 aspect-ratio wrapper */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: #f0f0f0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.video-wrapper video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Play/pause icon overlay ────────────────────────────────────────────── */
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* hidden by default; appears on hover (idle) or always when active */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+/* Icon visible only while hovering over the video area */
+.video-wrapper:hover .video-overlay {
+  opacity: 1;
+}
+
+.overlay-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.video-wrapper:hover .overlay-icon {
+  transform: scale(1.08);
+}
+
+/* ── Card metadata row ──────────────────────────────────────────────────── */
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0 0;
+}
+
+.card-category {
+  font-size: 7.5px;
+  letter-spacing: 0.28em;
+  color: #b8b8b8;
+  font-weight: 300;
+  text-transform: lowercase;
+  transition: color 0.2s;
+}
+
+/* Category label darkens when its card is active */
+.video-card.active .card-category {
+  color: #1a1a1a;
+}
+
+.card-detail-link {
+  font-size: 7px;
+  letter-spacing: 0.16em;
+  color: #d0d0d0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.card-detail-link:hover {
+  color: #555555;
+}
+
+/* ── Detail view — full-screen video with overlaid content ──────────────── */
+
+#detail-view {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+#detail-view.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Video fills the entire viewport as background */
+#detail-video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #111111;
+}
+
+#detail-video-bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Scrollable editorial layer over the video */
+.detail-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow-y: auto;
+  isolation: isolate;
+}
+
+/* Top controls — lives outside #detail-view so position:fixed is viewport-relative */
+#detail-top-controls {
+  position: fixed;
+  top: 1.75rem;
+  right: 2rem;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+#detail-top-controls.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Play/pause + close share a minimal style.
+   mix-blend-mode: difference → white on dark video, dark on light video. */
+#detail-play-btn,
+#detail-close-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+  mix-blend-mode: normal;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+#detail-play-btn:hover,
+#detail-close-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Editorial content — left-aligned column */
+.detail-content {
+  padding: 4.5rem 4vw 8rem;
+  margin: 0 2rem;
+  max-width: 780px;
+  background: rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Text uses a stable overlay for readability on the moving video */
+.detail-cat {
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  font-weight: 300;
+  text-transform: lowercase;
+  color: #ffffff;
+  text-shadow: 0 0 0.35rem rgba(0, 0, 0, 0.75);
+  margin-bottom: 0.45rem;
+}
+
+.detail-loc {
+  font-size: 1.45rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  color: #ffffff;
+  text-shadow: 0 0 0.35rem rgba(0, 0, 0, 0.75);
+}
+
+.detail-hr {
+  width: 28px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+  margin: 1.5rem 0;
+}
+
+.detail-para {
+  font-size: 0.65rem;
+  font-weight: 300;
+  line-height: 1.95;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  font-style: italic;
+  max-width: 560px;
+  margin-bottom: 1.75rem;
+  text-shadow: 0 0 0.35rem rgba(0, 0, 0, 0.75);
+}
+
+/* 2-column image placeholder grid */
+.detail-img-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  max-width: 640px;
+  margin-bottom: 0.55rem;
+}
+
+/* 3:2 aspect-ratio image placeholder */
+.detail-img-ph {
+  position: relative;
+  padding-top: 66.67%;
+  overflow: hidden;
+}
+
+.detail-img-ph svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.detail-caption {
+  font-size: 0.54rem;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  font-style: italic;
+  margin-bottom: 1.75rem;
+  text-shadow: 0 0 0.35rem rgba(0, 0, 0, 0.75);
+  opacity: 0.7;
+}
+
+/* ── Responsive — mobile —───────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  #location-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .overlay-panel {
+    max-height: 85vh;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 1.5rem 1.25rem 2rem;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  /* On mobile, no spatial scaling — cards stay equal size */
+  .video-card.active,
+  .video-card.inactive-neighbor {
+    transform: none;
+    opacity: 1;
+  }
+
+  .detail-content {
+    padding: 3rem 1.5rem 5rem;
+    margin: 0 1rem;
+  }
+
+  .detail-img-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #detail-top-controls {
+    top: 1rem;
+    right: 1.25rem;
+  }
+}
+
+/* ── MapLibre control overrides ─────────────────────────────────────────── */
+
+.maplibregl-ctrl-group {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.maplibregl-ctrl-group button {
+  color: #333 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  font-family: 'IBM Plex Mono', monospace !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+  background: #f0f0f0 !important;
+}
+
+.maplibregl-ctrl-bottom-right {
+  bottom: 14px !important;
+  right: 14px !important;
+}
+
+/* ── Animations ─────────────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

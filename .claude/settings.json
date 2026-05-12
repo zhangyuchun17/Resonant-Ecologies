@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command ':*)",
+      "Bash(powershell -Command \"Get-Command node -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source; \\(Get-Command npm -ErrorAction SilentlyContinue\\).Source\")",
+      "Bash(npm --version)",
+      "Bash(powershell -ExecutionPolicy Bypass -File scripts/filter_watershed.ps1)",
+      "Read(//d/02学習/2026spring/Resonant Ecologies/src/**)",
+      "Bash(npm install:*)",
+      "Bash(powershell -Command \"cd 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies'; npm install 2>&1 | Select-Object -Last 8\")",
+      "Bash(powershell -Command \"Get-Command node,npm,pnpm -ErrorAction SilentlyContinue | Select-Object Name,Source\")",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Program Files\\\\nodejs','C:\\\\Users\\\\92974\\\\AppData\\\\Roaming\\\\npm','C:\\\\Program Files\\\\nodejs\\\\npm.cmd' -ErrorAction SilentlyContinue | Select FullName\")",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Program Files' -Filter 'node*' -ErrorAction SilentlyContinue; Get-ChildItem 'C:\\\\Users\\\\92974' -Filter '.nvm' -ErrorAction SilentlyContinue\")",
+      "Bash(powershell -Command \"where.exe node; where.exe npm; where.exe pnpm\")",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Program Files\\\\nodejs' -ErrorAction SilentlyContinue | Select Name; Get-ChildItem 'C:\\\\Program Files \\(x86\\)\\\\nodejs' -ErrorAction SilentlyContinue | Select Name\")",
+      "Bash(powershell -Command \"Get-ChildItem 'C:\\\\Users\\\\92974\\\\AppData\\\\Local\\\\Programs' -ErrorAction SilentlyContinue | Select Name\")",
+      "Bash(powershell -Command \"New-Item -ItemType Directory -Path 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\data' -Force; Copy-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\public\\\\data\\\\*.geojson' 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\data\\\\'; Get-ChildItem 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\data'\")",
+      "Bash(powershell -Command \"Get-ChildItem 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies' -Filter 'README.md' | Select FullName\")",
+      "Bash(powershell -Command \"Get-ChildItem 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies' | Select Name, PSIsContainer\")",
+      "Bash(powershell -Command \"Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\src' -Recurse -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\public' -Recurse -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\DEVELOPMENT.md' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\QUICKSTART.md' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\PROJECT_SUMMARY.md' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\package.json' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\tsconfig.json' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\tsconfig.node.json' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\vite.config.ts' -Force; Remove-Item 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\.nvmrc' -Force; Get-ChildItem 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies' | Select-Object Name, PSIsContainer\")",
+      "Bash(powershell -Command \"Get-Content 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\data\\\\waterway_filtered.geojson' -TotalCount 1 | Select-String -Pattern '\\\\\"properties\\\\\"' -List\")",
+      "Bash(powershell -Command \"Get-Content 'D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\data\\\\waterway_filtered.geojson' -TotalCount 1 | Out-String | Select-String -Pattern '\\\\{\\\\\"type\\\\\":\\\\\"Feature\\\\\".*?\\(?=\\\\{\\\\\"type\\\\\":\\\\\"Feature\\\\\"|$\\)' -AllMatches | Select-Object -First 1 -ExpandProperty Matches | Select-Object -ExpandProperty Value\")",
+      "Bash(powershell -NoProfile -File \"D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\scripts\\\\inspect_properties.ps1\")",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File \"D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\scripts\\\\inspect_properties.ps1\")",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File \"D:\\\\02学习\\\\2026spring\\\\Resonant Ecologies\\\\scripts\\\\inspect_water_areas.ps1\")"
+    ]
+  }
+}
