@@ -2,7 +2,7 @@
 
 A hydro-acoustic investigation of desert water systems in the Santa Cruz watershed, southern Arizona.
 
-This interactive web application visualizes the hydrological and acoustic landscapes of key watercourses in the Tucson basin, integrating geospatial data with multimedia content.
+This interactive web application visualizes the hydrological and acoustic landscapes of five recording sites across the Tucson basin and border region, integrating watershed geospatial data with site-specific audiovisual content.
 
 ## Getting Started
 
@@ -22,25 +22,37 @@ No build process or Node.js installation required.
 ```
 Resonant Ecologies/
 ├── index.html              # Main HTML structure
-├── style.css               # CSS styles
-├── app.js                  # JavaScript logic for map, animations, and interactions
+├── style.css               # All styles
+├── app.js                  # Map, animations, overlays, and interactions
 ├── README.md               # This file
 │
 ├── data/                   # GeoJSON data files
-│   ├── waterway_filtered.geojson          # Filtered waterways (rivers and streams)
-│   ├── santa_cruz_watershed_complete.geojson  # Santa Cruz watershed boundary
-│   ├── rillito_system_watersheds.geojson      # Rillito sub-watersheds
+│   ├── waterway_filtered.geojson              # Filtered rivers and streams
+│   ├── santa_cruz_watershed_complete.geojson  # Santa Cruz watershed boundary (HUC8)
+│   ├── rillito_system_watersheds.geojson      # Rillito sub-watersheds (HUC12)
 │   └── water_area_polygon.geojson             # Water area polygons
 │
-├── media/                  # Multimedia content organized by location
-│   ├── Santa Cruz River/
-│   │   ├── Air/
-│   │   ├── Land/
-│   │   └── Water/
-│   └── Biosphere2 Ocean/
-│       ├── Air/
-│       ├── Land/
-│       └── Water/
+├── media/                  # Video files organized by location and category
+│   ├── Agua Caliente/
+│   │   ├── Air/    aguacalienteair_air_processed.mp4
+│   │   ├── Land/   aguacalinteland2.mp4
+│   │   └── Water/  aguacaliente_water_processed.mp4
+│   ├── Biosphere2 Ocean/
+│   │   ├── Air/    BiosphereOceanWaveGenerator1.mp4
+│   │   ├── Land/   Land.mp4
+│   │   └── Water/  coral sounds biopshere.mp4
+│   ├── Pantano Wash/
+│   │   ├── Air/    pantanoultrasound2_1.mp4
+│   │   ├── Land/   pantanoearth1.mp4
+│   │   └── Water/  pantano_water_memory_.mp4
+│   ├── Rillito River/
+│   │   ├── Air/    rillito_air_ultrasonic_processed.mp4
+│   │   ├── Land/   rillito_land_processed.mp4
+│   │   └── Water/  rillito_water_memory.mp4
+│   └── Santa Cruz River/
+│       ├── Air/    scrair1.mp4
+│       ├── Land/   santacruzland.mp4
+│       └── Water/  scrwater.mp4
 │
 └── scripts/                # PowerShell scripts for data preprocessing
     ├── filter_watershed.ps1
@@ -51,80 +63,57 @@ Resonant Ecologies/
 ## How It Works
 
 ### User Interface
-- **Intro Screen**: A frosted glass overlay with project title, description, and language toggle (English/Spanish)
-- **Map View**: Interactive map using MapLibre GL showing watershed boundaries and waterways
-- **Location Panels**: Clickable watercourse labels open side panels with media content
+- **Intro screen**: Frosted glass panel with project title, description, and language toggle (EN / SP / TR). Clicking *enter* transitions to the map.
+- **Navigation**: Top-right links — *Project* returns to the intro screen; *People* opens the author bios card.
+- **Map view**: Interactive MapLibre GL map showing watershed boundaries, waterways, and five location markers. An animated zoom plays on first entry.
+- **Location overlay**: Clicking a location marker opens a panel with site description and a three-column video grid (Air / Land / Water).
+- **Detail view**: Clicking the arrow on any video card expands it to a full-screen background with editorial text.
 
-### Map Features
-- Regional overview of the Santa Cruz watershed
-- Animated zoom from regional to local scale
-- Progressive reveal of sub-watersheds and waterways during animation
-- Watercourse labels with hover and click interactions
+### Recording Sites
+| Location | Watershed | Region |
+|---|---|---|
+| Santa Cruz River | Upper Santa Cruz | Tumacácori / border region |
+| Rillito River | Lower Rillito | Tucson |
+| Pantano Wash | Pantano | East Tucson |
+| Agua Caliente | Rincon Creek | Tucson foothills |
+| Biosphere 2 Ocean | Oracle / Oracle Ridge | Oracle, AZ |
 
-### Media Integration
-Each location supports three categories of media:
-- **Air**: Atmospheric sounds and visuals
-- **Land**: Terrestrial recordings and footage
-- **Water**: Hydro-acoustic data and underwater recordings
-
-## Adding Content
-
-### Media Files
-1. Place media files in the appropriate `media/[Location]/[Category]/` directory
-2. Supported formats: MP4 for video, MOV for video, other formats as needed
-3. Update the `MEDIA` object in `app.js` with the file paths
-
-### Locations
-To add new watercourse locations:
-1. Add a new object to the `LOCATIONS` array in `app.js`
-2. Include coordinates, name, watershed, and description
-3. Add corresponding media entries to the `MEDIA` object
+### Media Categories
+Each site has three video channels:
+- **Air** — atmospheric and ultrasonic recordings
+- **Land** — terrestrial and contact-microphone recordings
+- **Water** — hydro-acoustic and underwater recordings
 
 ## Data Sources
 
-| File | Source | Description | Size |
-|------|--------|-------------|------|
-| `waterway_filtered.geojson` | OpenStreetMap (filtered) | Rivers and streams within watershed | 4.5 MB |
-| `santa_cruz_watershed_complete.geojson` | USGS NHD WBD HUC8 | Upper Santa Cruz watershed boundary | 582 KB |
-| `rillito_system_watersheds.geojson` | USGS NHD WBD HUC12 | Rillito sub-watersheds | 420 KB |
-| `water_area_polygon.geojson` | Local data | Water area polygons | 941 KB |
+| File | Source | Description |
+|---|---|---|
+| `waterway_filtered.geojson` | OpenStreetMap (filtered) | Rivers and streams within watershed |
+| `santa_cruz_watershed_complete.geojson` | USGS NHD WBD HUC8 | Upper Santa Cruz watershed boundary |
+| `rillito_system_watersheds.geojson` | USGS NHD WBD HUC12 | Rillito sub-watersheds |
+| `water_area_polygon.geojson` | Local data | Water area polygons |
 
-### Data Processing
-The `scripts/` directory contains PowerShell scripts used for preprocessing:
-- Filtering OpenStreetMap data to include only rivers and streams
-- Spatial clipping to watershed boundaries
-- Data inspection and validation
+The `scripts/` directory contains PowerShell scripts used during data preprocessing: filtering OSM waterways, spatial clipping to watershed boundaries, and data inspection.
 
 ## Technical Details
 
-### Libraries and Frameworks
-- **MapLibre GL**: Open-source map rendering library
-- **Google Fonts**: IBM Plex Mono typeface
-- **Vanilla JavaScript**: No framework dependencies
+### Libraries
+- **MapLibre GL** — open-source map rendering
+- **IBM Plex Mono** — typeface via Google Fonts
+- **Vanilla JavaScript** — no framework dependencies
 
-### Map Configuration
-- Custom style with background and layered GeoJSON sources
-- Zoom-based opacity and width expressions for visual hierarchy
-- Disabled user interactions (pan, zoom) during intro animation
-- Custom markers for location labels and border annotations
+### Architecture
+- Single-page, no build step — `index.html` + `style.css` + `app.js`
+- All geodata loaded as static GeoJSON from `data/`
+- All media served directly from `media/`
+- Locations and media paths defined in the `LOCATIONS` and `MEDIA` objects in `app.js`
 
 ### Design System
-- Monochromatic color palette (black, white, grays)
-- Frosted glass effects using CSS `backdrop-filter`
-- Responsive layout with mobile considerations
-- Smooth animations and transitions
-
-## Development Notes
-
-- The application is designed to run entirely in the browser
-- All data is loaded as static GeoJSON files
-- Media files are served directly from the local server
-- No server-side processing or database required
+- Monochromatic palette (white `#f8f8f8` → black `#1a1a1a`)
+- Frosted glass via CSS `backdrop-filter: blur()`
+- Custom scroll indicator (thin line + dot) replacing browser scrollbars
+- Responsive layout with mobile breakpoints at 768 px
 
 ## License
 
 This project is part of an academic research initiative. Please contact the authors for usage permissions.
-
-## Contact
-
-For questions or contributions, please refer to the project documentation or contact the development team.

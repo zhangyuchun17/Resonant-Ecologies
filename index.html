@@ -12,7 +12,11 @@
 <body>
 
   <div id="map"></div>
-  <div id="top-link"><a id="about-link">About the Project</a></div>
+  <div id="top-link">
+    <a id="project-link">Project</a>
+    <span class="nav-sep">/</span>
+    <a id="people-link">People</a>
+  </div>
 
   <!-- Intro overlay — frosted glass panel -->
   <div id="intro">
@@ -21,7 +25,9 @@
       <div class="lang-toggle">
         <button class="lang-btn active" data-lang="en">EN</button>
         <span class="lang-sep">/</span>
-        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="es">SP</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="tr">TR</button>
       </div>
 
       <h1 class="title">Resonant Ecologies</h1>
@@ -42,6 +48,8 @@
           <p class="overlay-watershed" id="ov-watershed"></p>
           <h2 class="overlay-name" id="ov-name"></h2>
           <p class="overlay-desc" id="ov-desc"></p>
+          <p class="overlay-subtitle" id="ov-subtitle"></p>
+          <div class="overlay-body" id="ov-body"></div>
         </div>
         <button class="overlay-close-btn" id="overlay-close-btn">✕</button>
       </div>
@@ -60,6 +68,39 @@
     <div id="detail-video-bg"></div>
     <div class="detail-overlay">
       <div class="detail-content" id="detail-content"></div>
+    </div>
+  </div>
+
+  <!-- People overlay -->
+  <div id="people-overlay">
+    <div class="people-panel">
+      <div class="scroll-indicator" id="people-indicator">
+        <div class="scroll-dot" id="people-dot"></div>
+      </div>
+      <div class="people-scroll" id="people-scroll">
+      <div class="people-close-row">
+        <button class="overlay-close-btn" id="people-close-btn">✕</button>
+      </div>
+      <div class="people-content">
+
+        <div class="author-block">
+          <h2 class="author-name">Dr. Ilayda Altuntas Nott</h2>
+          <p class="author-bio">Dr. Ilayda Altuntas Nott is an artist, researcher, and Assistant Professor of Art &amp; Visual Culture Education at the University of Arizona. Her work brings together sound, listening, environmental experience, and artmaking to explore how people connect with place, memory, place, and material environments through sensory experience and creative practice.</p>
+          <p class="author-bio">She is the author of Sounding Art Practice as Research (SAPAR), a practice-related methodology grounded in field recording, listening practices, movement, and audiovisual translation as forms of inquiry. Through hydrophones, contact microphones, ultrasonic recordings, moving image, and abstract visual systems, her projects explore socio-cultural relationships between environmental resonance, infrastructure, vibration and lived experience.</p>
+          <p class="author-bio">Resonant Ecologies continues this practice through site-specific recordings collected across Southern Arizona, transforming environmental sounds and material vibrations into moving geometric forms shaped by rhythm, drift, pulse, distortion, and hydrological movement.</p>
+        </div>
+
+        <div class="author-divider"></div>
+
+        <div class="author-block">
+          <h2 class="author-name">Yuchun Zhang</h2>
+          <p class="author-bio">Yuchun Zhang is an urban designer, researcher, and web mapping designer whose work connects spatial analysis, GIS-based cartography, and interactive digital interfaces. With a background in architecture and urban design, she uses tools such as QGIS, geospatial mapping, and web visualization to examine relationships between landscape, infrastructure, environmental systems, and lived experience.</p>
+          <p class="author-bio">For Resonant Ecologies, Zhang designed and developed the project's digital platform and watershed-based mapping interface. Her work places the five recording sites within the broader hydrological context of Southern Arizona, tracing river systems, washes, watershed boundaries, and cross-border ecological relationships through geospatial data. Instead of framing the project through Tucson's administrative boundary, she organized the website around the form and logic of the watershed, creating an interface where users encounter the landscape through water traces, spatial navigation, and audiovisual experience.</p>
+          <p class="author-bio">Across her broader practice, Zhang uses mapping, spatial research, and digital interfaces to explore questions of belonging, memory, care, ecology, resilience, and collective space. More of her work can be found at: <a class="author-link" href="https://www.yuchunzhang.space/" target="_blank" rel="noopener">yuchunzhang.space</a>.</p>
+        </div>
+
+      </div>
+      </div><!-- /.people-scroll -->
     </div>
   </div>
 

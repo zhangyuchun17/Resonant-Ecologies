@@ -6,48 +6,67 @@ const LOCATIONS = [
     name: 'Santa Cruz River',
     watershed: 'upper santa cruz',
     description: 'The primary artery of the Tucson basin, flowing northward through the valley floor.',
-    lat: 32.22,
-    lng: -111.00
+    subtitle: 'upper santa cruz · tumacácori region',
+    body: [
+      'Near Tumacácori, the Santa Cruz River carried one of the strongest visible water presences across the project sites. Moving water, surrounding vegetation, sediment, insects, and shifting currents produced a layered sonic environment shaped by continuous flow and ecological movement near the U.S.–Mexico border region.',
+      'The audiovisual forms developed from this site became fluid and expansive. Water recordings generated flowing horizontal systems shaped by current and hydrological rhythm, air recordings produced expanding circular movements responding to environmental density and spatial motion, and land recordings transformed into resonant vibrating structures shaped by material contact and river textures. Together, the forms reflect the river as a space of movement, transition, and ecological continuity.'
+    ],
+    lat: 31.570294,
+    lng: -111.045606
   },
   {
     id: 'rillito',
     name: 'Rillito River',
     watershed: 'lower rillito river',
     description: 'The main east–west corridor of northern Tucson, draining the Catalina piedmont.',
-    lat: 32.285,
-    lng: -110.87
+    labelPos: 'above',
+    subtitle: 'rillito river wash · tucson region',
+    body: [
+      'At the Rillito River, the absence of visible water became the central condition shaping the recordings. The dry wash carried wind movement, low infrastructural vibration, nocturnal ecological activity, and long stretches of suspended quietness across the exposed riverbed landscape.',
+      'Unlike the denser aquatic recordings collected at other sites, the audiovisual forms developed from Rillito remained minimal and restrained. Sparse circular systems, drifting movement, and intermittent pulses emerged from ultrasonic and environmental recordings, reflecting fragmented ecological rhythms and the residual presence of an intermittent desert river system. Land recordings produced grounded resonant forms shaped by low-frequency vibration and dry material contact across the wash environment.'
+    ],
+    lat: 32.274889,
+    lng: -110.904717
   },
   {
     id: 'agua-caliente',
     name: 'Agua Caliente',
     watershed: 'agua caliente wash',
     description: 'A spring-fed system in the northeastern foothills, fed by thermal groundwater.',
-    lat: 32.282272176732334,
-    lng: -110.73141382413473
-  },
-  {
-    id: 'tanque-verde',
-    name: 'Tanque Verde Creek',
-    watershed: 'upper tanque verde wash',
-    description: 'An intermittent stream descending from the Rincon Mountains to the east.',
-    lat: 32.26211062454957,
-    lng: -110.82393926090197
+    subtitle: 'agua caliente park · tucson region',
+    body: [
+      'At Agua Caliente, the recordings centered around spring water, biological activity, and the continuous movement of sound through water, trees, and surrounding organic material. The site carried a dense ecological presence where aquatic movement, resonance, and environmental activity remained in constant interaction.',
+      'The resulting audiovisual forms became fluid, organic, and continuously shifting. Water recordings generated flowing horizontal systems shaped by turbulence and hydrological motion, land recordings transformed into morphing resonant structures responding to organic vibration and living material textures, and air recordings produced slowly drifting circular forms shaped by ecological density, movement, and sonic activity throughout the landscape.'
+    ],
+    lat: 32.281074,
+    lng: -110.730507
   },
   {
     id: 'pantano',
     name: 'Pantano Wash',
     watershed: 'upper pantano wash',
     description: 'A broad ephemeral wash draining the southeastern bajada toward the Rillito.',
-    lat: 32.195,
-    lng: -110.775
+    labelPos: 'left',
+    subtitle: '',
+    body: [
+      'Recorded beneath the bridge corridors and pathways of Pantano Wash, this site focused on the relationship between urban infrastructure, ecological activity, and the absence of visible water within the wash system. Traffic vibration, bat activity, passing bicycles, metallic resonance, and concrete surfaces shaped the recordings collected beneath the bridge structures.',
+      'The audiovisual forms developed from Pantano became fractured, sparse, and infrastructural. Ultrasonic and air recordings generated intermittent pulses and isolated circular systems responding to nocturnal movement beneath the bridge environment, while land recordings transformed into vibrating geometric structures shaped by metallic resonance and low structural frequencies. In the absence of visible water, faint drifting line systems emerged as residual traces of latent hydrological presence within the dry urban wash.'
+    ],
+    lat: 32.240540,
+    lng: -110.841439
   },
   {
     id: 'biosphere2',
-    name: 'Biosphere 2',
+    name: 'Biosphere 2 Ocean',
     watershed: 'oracle area',
     description: 'A large-scale Earth systems science research facility north of Tucson, housing living ecosystems including a tropical rainforest, savannah, and ocean biome.',
-    lat: 32.581882102973815,
-    lng: -110.84757005691236
+    subtitle: 'biosphere 2 · oracle region',
+    body: [
+      'At Biosphere 2, the recordings focused on human-built ecological systems, contained aquatic environments, and the resonant structures supporting simulated forms of environmental life. Using hydrophones, air recordings, and contact microphones attached to surrounding architectural and material surfaces, I recorded circulating water systems, aquatic movement, coral growth environments, mechanical resonance, and low structural vibrations moving throughout the site.',
+      'Unlike the river and wash recordings collected across Southern Arizona, the audiovisual forms developed from Biosphere 2 became more rhythmic, repetitive, and structurally controlled. Water recordings generated oscillating flow systems shaped by circulation and contained aquatic movement, air recordings produced geometric pulse structures responding to enclosed environmental activity, and land recordings transformed into slow resonant forms resembling mechanical heartbeats moving through the architecture of the human-built ocean system. Together, the forms reflect the tension between ecological life, simulation, technological control, and environmental containment.'
+    ],
+    lat: 32.5784467,
+    lng: -110.8513627
   }
 ]
 
@@ -55,34 +74,51 @@ const LOCATIONS = [
 // null entry = no media yet; placeholder SVG is shown instead.
 const MEDIA = {
   'santa-cruz': {
-    air:   { src: 'media/Santa Cruz River/Air/Audio-Visual/scrair1.MOV' },
-    earth: { src: 'media/Santa Cruz River/Land/Audio-Visual/santacruzland.mp4' },
-    water: { src: 'media/Santa Cruz River/Water/Audio-Visual/scrwater.mp4' }
+    air:   { src: 'media/Santa Cruz River/Air/scrair1.mp4' },
+    land: { src: 'media/Santa Cruz River/Land/santacruzland.mp4' },
+    water: { src: 'media/Santa Cruz River/Water/scrwater.mp4' }
   },
-  'biosphere2': {
-    air:   { src: 'media/Biosphere2 Ocean/Air/BiosphereOceanWaveGenerator1.mp4' },
-    earth: { src: 'media/Biosphere2 Ocean/Land/Land.mp4' },
-    water: { src: 'media/Biosphere2 Ocean/Water/coral sounds biopshere.mp4' }
+  'rillito': {
+    air:   { src: 'media/Rillito River/Air/rillito_air_ultrasonic_processed.mp4' },
+    land: { src: 'media/Rillito River/Land/rillito_land_processed.mp4' },
+    water: { src: 'media/Rillito River/Water/rillito_water_memory.mp4' }
+  },
+  'agua-caliente': {
+    air:   { src: 'media/Agua Caliente/Air/aguacalienteair_air_processed.mp4' },
+    land: { src: 'media/Agua Caliente/Land/aguacalinteland2.mp4' },
+    water: { src: 'media/Agua Caliente/Water/aguacaliente_water_processed.mp4' }
   },
   'pantano': {
     air:   { src: 'media/Pantano Wash/Air/pantanoultrasound2_1.mp4' },
-    earth: { src: 'media/Pantano Wash/Land/pantanoearth1.mp4' },
-    water: null
+    land: { src: 'media/Pantano Wash/Land/pantanoearth1.mp4' },
+    water: { src: 'media/Pantano Wash/Water/pantano_water_memory_.mp4' }
+  },
+  'biosphere2': {
+    air:   { src: 'media/Biosphere2 Ocean/Air/BiosphereOceanWaveGenerator1.mp4' },
+    land: { src: 'media/Biosphere2 Ocean/Land/Land.mp4' },
+    water: { src: 'media/Biosphere2 Ocean/Water/coral sounds biopshere.mp4' }
   }
 }
 
-const CATEGORIES = ['air', 'earth', 'water']
+const CATEGORIES = ['air', 'land', 'water']
+
+const BORDER_COORDS = [
+  [-111.30, 31.329], [-111.10, 31.332], [-110.934, 31.333],
+  [-110.75, 31.333], [-110.45, 31.333], [-110.33, 31.333]
+]
 
 const COPY = {
   en: {
-    subtitle: 'text placeholder text placeholder text placeholder\ntext placeholder text placeholder',
-    method: 'text placeholder',
+    subtitle: 'Resonant Ecologies is a practice-led audiovisual research project that uses field recording, contact microphones, hydrophones, embodied listening, and moving image to investigate environmental resonance across arid landscapes in Southern Arizona. Through site-responsive sound collection and experimental visual translation, the project transforms ecological vibrations, material textures, water presence, and atmospheric conditions into abstract audiovisual motion systems. Rather than functioning as documentary representation, the work approaches artmaking itself as a method of inquiry, using sound, rhythm, geometry, and movement to examine relationships between landscape, perception, ecology, and human intervention.',
     enter: 'enter'
   },
   es: {
-    subtitle: 'marcador de posición de texto marcador de posición de texto\nmarcador de posición de texto marcador de posición',
-    method: 'marcador de posición de texto',
+    subtitle: 'Resonant Ecologies es un proyecto de investigación audiovisual basado en la práctica que utiliza grabaciones de campo, micrófonos de contacto, hidrófonos, escucha corporalizada e imagen en movimiento para investigar la resonancia ambiental en paisajes áridos del sur de Arizona. A través de la recolección sonora específica de cada sitio y la traducción visual experimental, el proyecto transforma vibraciones ecológicas, texturas materiales, presencia de agua y condiciones atmosféricas en sistemas audiovisuales abstractos de movimiento. En lugar de funcionar como una representación documental, la obra aborda la creación artística como un método de investigación, utilizando sonido, ritmo, geometría y movimiento para examinar las relaciones entre paisaje, percepción, ecología e intervención humana dentro de entornos desérticos.',
     enter: 'entrar'
+  },
+  tr: {
+    subtitle: 'Resonant Ecologies, Güney Arizona\'nın kurak coğrafyalarında çevresel rezonansı araştırmak amacıyla saha kayıtları, kontak mikrofonları, hidrofona dayalı kayıtlar, bedensel dinleme pratikleri ve hareketli görüntüyü kullanan pratiğe dayalı bir görsel-işitsel araştırma projesidir. Mekâna özgü ses toplama süreçleri ve deneysel görsel çeviri yöntemleri aracılığıyla proje; ekolojik titreşimleri, maddesel dokuları, su varlığını ve atmosferik koşulları soyut görsel-işitsel hareket sistemlerine dönüştürür. Belgesel temsil biçiminden ziyade, çalışma sanat üretimini bir araştırma yöntemi olarak ele alır; ses, ritim, geometri ve hareket aracılığıyla peyzaj, algı, ekoloji ve insan müdahalesi arasındaki ilişkileri çöl çevreleri içerisinde incelemeyi amaçlar.',
+    enter: 'gir'
   }
 }
 
@@ -114,6 +150,41 @@ let currentGridVideo = null  // tracks the currently active grid video
 
 // ── Map ───────────────────────────────────────────────────────────────────
 
+function getLocationBounds() {
+  const lats = LOCATIONS.map(l => l.lat)
+  const lngs = LOCATIONS.map(l => l.lng)
+  return [
+    [Math.min(...lngs) - 0, Math.min(...lats) - 0],
+    [Math.max(...lngs) + 0, Math.max(...lats) + 0]
+  ]
+}
+
+function getInitialBounds() {
+  const lats = LOCATIONS.map(l => l.lat)
+  const lngs = LOCATIONS.map(l => l.lng)
+  const borderLats = BORDER_COORDS.map(c => c[1])
+  const borderLngs = BORDER_COORDS.map(c => c[0])
+  const south = Math.min(...borderLats) - 0.25
+  const north = Math.max(...lats) + 0.35
+  const west  = Math.min(...lngs, ...borderLngs) - 0.2
+  const east  = Math.max(...lngs, ...borderLngs) + 0.2
+  return [[west, south], [east, north]]
+}
+
+function getZoomedInPadding() {
+  const w = window.innerWidth
+  if (w >= 1024) return { top: 40, bottom: 40, left: 60, right: 60 }
+  if (w >= 768)  return { top: 30, bottom: 30, left: 45, right: 45 }
+  return                 { top: 20, bottom: 20, left: 25, right: 25 }
+}
+
+function getResponsivePadding() {
+  const w = window.innerWidth
+  if (w >= 1024) return { top: 80, bottom: 80, left: 120, right: 120 }
+  if (w >= 768)  return { top: 60, bottom: 60, left: 80,  right: 80  }
+  return                 { top: 40, bottom: 40, left: 40,  right: 40  }
+}
+
 function initMap() {
   map = new maplibregl.Map({
     container: 'map',
@@ -122,9 +193,9 @@ function initMap() {
       sources: {},
       layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#ffffff' } }]
     },
-    center: [-110.87, 32.0],
-    zoom: 7.5,
-    maxBounds: [[-112.2, 30.2], [-109.4, 33.8]],
+    bounds: getInitialBounds(),
+    fitBoundsOptions: { padding: getResponsivePadding() },
+    maxBounds: [[-118, 28], [-104, 36]],
     attributionControl: false,
     pitchWithRotate: false
   })
@@ -163,13 +234,7 @@ function initMap() {
         features: [{
           type: 'Feature',
           properties: {},
-          geometry: {
-            type: 'LineString',
-            coordinates: [
-              [-111.30, 31.329], [-111.10, 31.332], [-110.934, 31.333],
-              [-110.75, 31.333], [-110.45, 31.333], [-110.33, 31.333]
-            ]
-          }
+          geometry: { type: 'LineString', coordinates: BORDER_COORDS }
         }]
       }
     })
@@ -244,7 +309,6 @@ function initMap() {
       ['>', ['index-of', 'Santa Cruz',    ['coalesce', ['get', 'name'], '']], -1],
       ['>', ['index-of', 'Rillito',       ['coalesce', ['get', 'name'], '']], -1],
       ['>', ['index-of', 'Agua Caliente', ['coalesce', ['get', 'name'], '']], -1],
-      ['>', ['index-of', 'Tanque Verde',  ['coalesce', ['get', 'name'], '']], -1],
       ['>', ['index-of', 'Pantano',       ['coalesce', ['get', 'name'], '']], -1]
     ]
     map.addLayer({
@@ -293,13 +357,21 @@ function initMap() {
       })
     })
 
+    const anchorMap = { right: 'left', left: 'right', above: 'bottom' }
     LOCATIONS.forEach(loc => {
+      const pos = loc.labelPos || 'right'
       const el = document.createElement('div')
-      el.className = 'location-label'
+      el.className = 'location-label' + (pos !== 'right' ? ` label-${pos}` : '')
       el.style.opacity = '0'
-      el.innerHTML = `<span class="label-dot"></span><span class="label-text">${loc.name.toLowerCase()}</span>`
+      const markerHTML = `<span class="location-marker"><span class="marker-ring"></span><span class="marker-ring"></span></span>`
+      if (pos === 'above') {
+        el.innerHTML = `<span class="label-text">${loc.name.toLowerCase()}</span>${markerHTML}`
+      } else {
+        el.innerHTML = `${markerHTML}<span class="label-text">${loc.name.toLowerCase()}</span>`
+      }
+      el.dataset.locId = loc.id
       el.addEventListener('click', () => openLocation(loc.id))
-      new maplibregl.Marker({ element: el, anchor: 'left' })
+      new maplibregl.Marker({ element: el, anchor: anchorMap[pos] })
         .setLngLat([loc.lng, loc.lat])
         .addTo(map)
     })
@@ -335,9 +407,8 @@ function startAnimation() {
 
   map.setLayoutProperty('waterways-river-sc', 'visibility', 'visible')
 
-  map.flyTo({
-    center: [-110.87, 32.39],
-    zoom: 10.0,
+  map.fitBounds(getLocationBounds(), {
+    padding: getZoomedInPadding(),
     duration: 7000,
     essential: true
   })
@@ -370,7 +441,6 @@ function startAnimation() {
 function updateCopy() {
   const t = COPY[currentLang]
   document.getElementById('subtitle-text').textContent = t.subtitle
-  document.getElementById('method-text').textContent = t.method
   document.getElementById('enter-btn').textContent = t.enter
 }
 
@@ -386,15 +456,18 @@ function initIntro() {
     })
   })
 
-const aboutLink = document.getElementById('about-link')
-    aboutLink.style.display = 'none'
+const projectLink = document.getElementById('project-link')
+    const peopleLink = document.getElementById('people-link')
+    projectLink.style.display = 'none'
+    peopleLink.style.display = 'none'
 
     document.getElementById('enter-btn').addEventListener('click', () => {
       const intro = document.getElementById('intro')
       intro.style.opacity = '0'
       intro.style.pointerEvents = 'none'
       setTimeout(() => { intro.style.display = 'none' }, 600)
-      aboutLink.style.display = ''
+      projectLink.style.display = ''
+      peopleLink.style.display = ''
 
       if (map.loaded()) {
         startAnimation()
@@ -403,9 +476,13 @@ const aboutLink = document.getElementById('about-link')
       }
     })
 
-    aboutLink.addEventListener('click', () => {
+    projectLink.addEventListener('click', () => {
       showIntro()
-  })
+    })
+
+    peopleLink.addEventListener('click', () => {
+      openPeople()
+    })
 }
 
 // ── Location overlay ──────────────────────────────────────────────────────
@@ -418,7 +495,17 @@ function openLocation(id) {
   document.getElementById('ov-name').textContent = loc.name
   document.getElementById('ov-desc').textContent = loc.description
 
+  const subtitleEl = document.getElementById('ov-subtitle')
+  subtitleEl.textContent = loc.subtitle || ''
+  subtitleEl.style.display = loc.subtitle ? '' : 'none'
+
+  const bodyEl = document.getElementById('ov-body')
+  bodyEl.innerHTML = (loc.body || []).map(p => `<p>${p}</p>`).join('')
+
   buildVideoGrid(loc.id, loc.name)
+
+  document.querySelectorAll('.location-label').forEach(el => el.classList.remove('active'))
+  document.querySelector(`.location-label[data-loc-id="${id}"]`)?.classList.add('active')
 
   document.getElementById('location-overlay').classList.add('open')
 }
@@ -428,11 +515,36 @@ function closeOverlay() {
   overlay.classList.remove('open')
   overlay.querySelectorAll('video').forEach(v => { v.pause(); v.muted = true })
   currentGridVideo = null
+  document.querySelectorAll('.location-label').forEach(el => el.classList.remove('active'))
 }
+
+function openPeople() {
+  document.getElementById('people-overlay').classList.add('open')
+  updatePeopleDot()
+}
+
+function closePeople() {
+  document.getElementById('people-overlay').classList.remove('open')
+}
+
+function updatePeopleDot() {
+  const scrollEl = document.getElementById('people-scroll')
+  const indicator = document.getElementById('people-indicator')
+  const dot = document.getElementById('people-dot')
+  if (!scrollEl || !indicator || !dot) return
+  const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
+  const ratio = maxScroll > 0 ? scrollEl.scrollTop / maxScroll : 0
+  const trackH = indicator.offsetHeight
+  const dotH = dot.offsetHeight
+  dot.style.top = (ratio * (trackH - dotH)) + 'px'
+}
+
+document.getElementById('people-scroll').addEventListener('scroll', updatePeopleDot)
 
 function showIntro() {
   const intro = document.getElementById('intro')
-  const aboutLink = document.getElementById('about-link')
+  const projectLink = document.getElementById('project-link')
+  const peopleLink = document.getElementById('people-link')
   const detailView = document.getElementById('detail-view')
   const detailControls = document.getElementById('detail-top-controls')
   const locationOverlay = document.getElementById('location-overlay')
@@ -440,7 +552,9 @@ function showIntro() {
   intro.style.display = ''
   intro.style.opacity = '1'
   intro.style.pointerEvents = 'auto'
-  aboutLink.style.display = 'none'
+  projectLink.style.display = 'none'
+  peopleLink.style.display = 'none'
+  closePeople()
 
   locationOverlay.classList.remove('open')
   detailView.classList.remove('open')
@@ -691,15 +805,21 @@ function closeDetail() {
 
 document.getElementById('overlay-close-btn').addEventListener('click', closeOverlay)
 document.getElementById('detail-close-btn').addEventListener('click', closeDetail)
-document.getElementById('detail-close-btn').addEventListener('click', closeDetail)
+document.getElementById('people-close-btn').addEventListener('click', closePeople)
 
 document.getElementById('location-overlay').addEventListener('click', e => {
   if (e.target.id === 'location-overlay') closeOverlay()
 })
 
+document.getElementById('people-overlay').addEventListener('click', e => {
+  if (e.target.id === 'people-overlay') closePeople()
+})
+
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return
-  if (document.getElementById('detail-view').classList.contains('open')) {
+  if (document.getElementById('people-overlay').classList.contains('open')) {
+    closePeople()
+  } else if (document.getElementById('detail-view').classList.contains('open')) {
     closeDetail()
   } else {
     closeOverlay()

@@ -40,9 +40,19 @@ html, body {
   top: 1.75rem;
   right: 2rem;
   z-index: 65;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-#about-link {
+.nav-sep {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  color: #cccccc;
+}
+
+#project-link,
+#people-link {
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   font-size: 0.68rem;
   letter-spacing: 0.24em;
@@ -52,8 +62,134 @@ html, body {
   transition: color 0.2s ease, text-decoration 0.2s ease, opacity 0.2s ease;
 }
 
-#about-link:hover {
+#project-link:hover,
+#people-link:hover {
   text-decoration: underline;
+}
+
+/* ── People overlay ─────────────────────────────────────────────────────── */
+
+#people-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(248, 248, 248, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#people-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.people-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(200, 200, 200, 0.55);
+  border-radius: 20px;
+  max-width: 620px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.people-scroll {
+  padding: 2rem 2.5rem 2.5rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.people-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-indicator {
+  position: absolute;
+  right: 18px;
+  top: 80px;
+  bottom: 80px;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scroll-dot {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.28);
+  transition: top 0.12s ease;
+}
+
+.people-close-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.people-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.author-block {
+  padding: 0.25rem 0 1.75rem;
+}
+
+.author-name {
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.author-bio {
+  font-size: 0.62rem;
+  font-weight: 300;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: #555555;
+  margin-bottom: 0.85rem;
+}
+
+.author-bio:last-child {
+  margin-bottom: 0;
+}
+
+.author-link {
+  color: #555555;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.author-link:hover {
+  color: #1a1a1a;
+}
+
+.author-divider {
+  width: 28px;
+  height: 1px;
+  background: #cccccc;
+  margin: 0.25rem 0 1.75rem;
 }
 
 .panel {
@@ -162,13 +298,52 @@ html, body {
   white-space: nowrap;
 }
 
-.label-dot {
+.location-marker {
+  position: relative;
   width: 4px;
   height: 4px;
+  flex-shrink: 0;
+}
+
+.location-marker::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
   background: #1a1a1a;
-  flex-shrink: 0;
-  transition: transform 0.25s ease;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.marker-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin-top: -14px;
+  margin-left: -14px;
+  border-radius: 50%;
+  border: 0.75px solid rgba(26, 26, 26, 0);
+  pointer-events: none;
+  transform: scale(0.15);
+  transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+.location-label:hover .location-marker::before { opacity: 0; transform: scale(0); }
+
+.location-label:hover .marker-ring:nth-child(1) {
+  animation: marker-ripple 2.8s ease-out infinite;
+}
+
+.location-label:hover .marker-ring:nth-child(2) {
+  animation: marker-ripple 2.8s ease-out 1.1s infinite;
+}
+
+.location-label.active .marker-ring:nth-child(1) {
+  animation: none;
+  transform: scale(0.44);
+  border-color: rgba(26, 26, 26, 0.25);
 }
 
 .label-text {
@@ -180,7 +355,16 @@ html, body {
   transition: opacity 0.2s;
 }
 
-.location-label:hover .label-dot  { transform: scale(2.2); }
+.location-label.label-above {
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.location-label.label-left {
+  flex-direction: row-reverse;
+}
+
 .location-label:hover .label-text { opacity: 0.45; }
 
 /* ── Border labels ──────────────────────────────────────────────────────── */
@@ -200,14 +384,14 @@ html, body {
 /* ── Map hint ───────────────────────────────────────────────────────────── */
 
 .map-hint {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  top: 1.75rem;
+  left: 2rem;
+  z-index: 65;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 8px;
+  font-size: 0.68rem;
   font-weight: 300;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.24em;
   color: #bbbbbb;
   pointer-events: none;
   animation: fadeIn 2s ease forwards;
@@ -278,6 +462,24 @@ html, body {
   line-height: 1.85;
   color: #666666;
   letter-spacing: 0.04em;
+}
+
+.overlay-subtitle {
+  font-size: 0.58rem;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: #999999;
+  text-transform: lowercase;
+  margin-top: 1.2em;
+}
+
+.overlay-body p {
+  font-size: 0.62rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: #666666;
+  letter-spacing: 0.04em;
+  margin-top: 0.9em;
 }
 
 .overlay-close-btn {
@@ -645,21 +847,59 @@ html, body {
 /* ── MapLibre control overrides ─────────────────────────────────────────── */
 
 .maplibregl-ctrl-group {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid #e0e0e0 !important;
+  background: transparent !important;
+  border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.5rem !important;
 }
 
 .maplibregl-ctrl-group button {
-  color: #333 !important;
   background: transparent !important;
+  border: none !important;
   border-radius: 0 !important;
-  font-family: 'IBM Plex Mono', monospace !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+
+.maplibregl-ctrl-group button + button {
+  border-top: none !important;
 }
 
 .maplibregl-ctrl-group button:hover {
-  background: #f0f0f0 !important;
+  background: transparent !important;
+}
+
+/* Hide default SVG icons */
+.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon,
+.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+  visibility: hidden !important;
+}
+
+/* Inject + and − as text */
+.maplibregl-ctrl-zoom-in::after,
+.maplibregl-ctrl-zoom-out::after {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace !important;
+  font-size: 1.1rem !important;
+  font-weight: 350 !important;
+  letter-spacing: 0 !important;
+  color: #aaaaaa !important;
+  transition: color 0.2s ease !important;
+  pointer-events: none !important;
+}
+
+.maplibregl-ctrl-zoom-in::after  { content: '+' !important; }
+.maplibregl-ctrl-zoom-out::after { content: '−' !important; }
+
+.maplibregl-ctrl-zoom-in:hover::after,
+.maplibregl-ctrl-zoom-out:hover::after {
+  color: #1a1a1a !important;
 }
 
 .maplibregl-ctrl-bottom-right {
@@ -672,4 +912,9 @@ html, body {
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+@keyframes marker-ripple {
+  0%   { transform: scale(0.15); border-color: rgba(26, 26, 26, 0.7); }
+  100% { transform: scale(2.2);  border-color: rgba(26, 26, 26, 0);   }
 }
