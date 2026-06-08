@@ -402,9 +402,22 @@ html, body {
 
 /* ── Map hint ───────────────────────────────────────────────────────────── */
 
-.map-hint {
+.map-title {
   position: fixed;
   top: 1.75rem;
+  left: var(--edge);
+  z-index: 65;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.24em;
+  color: #1a1a1a;
+  pointer-events: none;
+}
+
+.map-hint {
+  position: fixed;
+  top: 2.75rem;
   left: var(--edge);
   z-index: 65;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
@@ -633,11 +646,11 @@ html, body {
 }
 
 .card-category {
-  font-size: 7.5px;
+  font-size: 9px;
   letter-spacing: 0.28em;
-  color: #b8b8b8;
+  color: #1a1a1a;
   font-weight: 300;
-  text-transform: lowercase;
+  text-transform: capitalize;
   transition: color 0.2s;
 }
 
@@ -647,9 +660,9 @@ html, body {
 }
 
 .card-detail-link {
-  font-size: 7px;
+  font-size: 8px;
   letter-spacing: 0.16em;
-  color: #d0d0d0;
+  color: #1a1a1a;
   cursor: pointer;
   transition: color 0.2s;
 }
@@ -734,12 +747,45 @@ html, body {
   pointer-events: auto;
 }
 
-/* Hide map hint and nav links while detail view is open */
-body:has(#detail-view.open) .map-hint,
-body:has(#detail-view.open) .map-ack,
+#detail-info-btn {
+  position: fixed;
+  top: 1.75rem;
+  left: var(--edge);
+  z-index: 70;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+#detail-info-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#detail-info-btn.expanded {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+#detail-info-btn.expanded:hover {
+  background: transparent;
+  transform: none;
+}
+
+/* Hide title and nav when detail view is open */
+body:has(#detail-view.open) .map-title,
 body:has(#detail-view.open) #project-link,
 body:has(#detail-view.open) #people-link,
-body:has(#detail-view.open) .nav-sep,
+body:has(#detail-view.open) .nav-sep {
+  display: none !important;
+}
+
+/* Hide map hint and ack when detail view or location overlay is open */
+body:has(#detail-view.open) .map-hint,
+body:has(#detail-view.open) .map-ack,
 body:has(#location-overlay.open) .map-hint,
 body:has(#location-overlay.open) .map-ack {
   display: none !important;
@@ -747,6 +793,7 @@ body:has(#location-overlay.open) .map-ack {
 
 /* Play/pause + close share a minimal style.
    mix-blend-mode: difference → white on dark video, dark on light video. */
+#detail-info-btn,
 #detail-play-btn,
 #detail-close-btn {
   font-family: 'IBM Plex Mono', monospace;
@@ -766,6 +813,7 @@ body:has(#location-overlay.open) .map-ack {
   transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
 }
 
+#detail-info-btn:hover,
 #detail-play-btn:hover,
 #detail-close-btn:hover {
   opacity: 0.9;
@@ -782,7 +830,14 @@ body:has(#location-overlay.open) .map-ack {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-radius: 20px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  clip-path: inset(0 0 0 0 round 20px);
+  transition: clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.detail-content.collapsed {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* Text uses a stable overlay for readability on the moving video */
@@ -992,6 +1047,7 @@ body:has(#location-overlay.open) .map-ack {
   pointer-events: none;
   max-width: 28ch;
   line-height: 1.5;
+  animation: fadeIn 2s ease forwards;
 }
 
 /* ── Animations ─────────────────────────────────────────────────────────── */

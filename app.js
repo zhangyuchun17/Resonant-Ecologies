@@ -196,6 +196,7 @@ function initMap() {
     bounds: getInitialBounds(),
     fitBoundsOptions: { padding: getResponsivePadding() },
     maxBounds: [[-118, 28], [-104, 36]],
+    minZoom: 8,
     attributionControl: false,
     pitchWithRotate: false
   })
@@ -429,15 +430,7 @@ function startAnimation() {
       el.style.transition = 'opacity 1.6s ease'
       el.style.opacity = '1'
     })
-    const hint = document.createElement('p')
-    hint.className = 'map-hint'
-    hint.textContent = 'select a watercourse'
-    document.body.appendChild(hint)
-
-    const ack = document.createElement('p')
-    ack.className = 'map-ack'
-    ack.textContent = 'Funded by the University of Arizona\'s Arts Research and Resilience Initiative (ARRI)'
-    document.body.appendChild(ack)
+    document.querySelectorAll('.map-hint, .map-ack').forEach(el => el.style.display = '')
   })
 }
 
@@ -465,6 +458,7 @@ const projectLink = document.getElementById('project-link')
     const peopleLink = document.getElementById('people-link')
     projectLink.style.display = 'none'
     peopleLink.style.display = 'none'
+    document.querySelectorAll('.map-title, .map-hint, .map-ack').forEach(el => el.style.display = 'none')
 
     document.getElementById('enter-btn').addEventListener('click', () => {
       const intro = document.getElementById('intro')
@@ -473,7 +467,7 @@ const projectLink = document.getElementById('project-link')
       setTimeout(() => { intro.style.display = 'none' }, 600)
       projectLink.style.display = ''
       peopleLink.style.display = ''
-      document.querySelectorAll('.map-hint, .map-ack').forEach(el => el.style.display = '')
+      document.querySelector('.map-title').style.display = ''
 
       if (map.loaded()) {
         startAnimation()
@@ -582,7 +576,7 @@ function showIntro() {
   intro.style.pointerEvents = 'auto'
   projectLink.style.display = 'none'
   peopleLink.style.display = 'none'
-  document.querySelectorAll('.map-hint, .map-ack').forEach(el => el.style.display = 'none')
+  document.querySelectorAll('.map-title, .map-hint, .map-ack').forEach(el => el.style.display = 'none')
   closePeople()
 
   locationOverlay.classList.remove('open')
@@ -707,7 +701,7 @@ function buildVideoCard(locName, category, media) {
 
   const detailSpan = document.createElement('span')
   detailSpan.className = 'card-detail-link'
-  detailSpan.textContent = 'detail →'
+  detailSpan.textContent = 'Detail →'
   detailSpan.addEventListener('click', e => {
     e.stopPropagation()
     const gridVideo = card.querySelector('video')
@@ -893,18 +887,131 @@ function openDetail(locName, category, mediaSrc, startTime = 0) {
 
   content.append(cat, loc, hr, para1, imgWrap)
 
+  content.classList.add('collapsed')
+
   document.getElementById('detail-overlay').scrollTop = 0
   document.getElementById('detail-view').classList.add('open')
   document.getElementById('detail-top-controls').classList.add('visible')
+  const infoBtn = document.getElementById('detail-info-btn')
+  infoBtn.textContent = '≡'
+  infoBtn.classList.remove('expanded')
+  infoBtn.classList.add('visible')
   requestAnimationFrame(() => {
     refreshScrollIndicator('detail-overlay', 'detail-indicator')
     updateDetailDot()
   })
+
+  setTimeout(() => expandCard(infoBtn, content), 500)
+}
+
+// ── FLIP card expand / collapse ───────────────────────────────────────────
+
+let _cardTransitionHandler = null
+let _cardTransitionTarget  = null
+
+function _cancelCardAnim() {
+  if (_cardTransitionHandler && _cardTransitionTarget) {
+    _cardTransitionTarget.removeEventListener('transitionend', _cardTransitionHandler)
+  }
+  _cardTransitionHandler = null
+  _cardTransitionTarget  = null
+}
+
+function _onCardTransitionEnd(content, done) {
+  _cancelCardAnim()
+  _cardTransitionHandler = (e) => {
+    if (e.target !== content || e.propertyName !== 'clip-path') return
+    _cancelCardAnim()
+    content.style.transition = ''
+    content.style.clipPath    = ''
+    content.style.transform   = ''
+    done()
+  }
+  _cardTransitionTarget = content
+  content.addEventListener('transitionend', _cardTransitionHandler)
+}
+
+function expandCard(btn, content) {
+  _cancelCardAnim()
+
+  // FIRST: capture button's exact viewport rect
+  const btnRect = btn.getBoundingClientRect()
+
+  // Switch to expanded state instantly (visibility: visible) so we can measure it
+  content.style.transition = 'none'
+  content.classList.remove('collapsed')
+
+  // LAST: force reflow → capture expanded rect
+  const cardRect = content.getBoundingClientRect()
+
+  // INVERT: translate card to button's position + clip to button's size
+  const dx = btnRect.left - cardRect.left
+  const dy = btnRect.top  - cardRect.top
+  const r  = Math.max(0, cardRect.right  - btnRect.right)
+  const b  = Math.max(0, cardRect.bottom - btnRect.bottom)
+  content.style.transform = `translate(${dx}px, ${dy}px)`
+  content.style.clipPath  = `inset(0 ${r}px ${b}px 0 round 999px)`
+
+  btn.style.opacity = '0'
+  btn.style.pointerEvents = 'none'
+
+  // PLAY: two RAFs — first commits the inverted frame, second starts the transition
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      _onCardTransitionEnd(content, () => {
+        btn.textContent = '—'
+        btn.classList.add('expanded')
+        btn.style.opacity = ''
+        btn.style.pointerEvents = ''
+      })
+      const ease = '0.55s cubic-bezier(0.4, 0, 0.2, 1)'
+      content.style.transition = `clip-path ${ease}, transform ${ease}`
+      content.style.clipPath   = 'inset(0 0 0 0 round 20px)'
+      content.style.transform  = 'translate(0, 0)'
+    })
+  })
+}
+
+function collapseCard(btn, content) {
+  _cancelCardAnim()
+
+  const btnRect  = btn.getBoundingClientRect()
+  const cardRect = content.getBoundingClientRect()
+
+  const dx = btnRect.left - cardRect.left
+  const dy = btnRect.top  - cardRect.top
+  const r  = Math.max(0, cardRect.right  - btnRect.right)
+  const b  = Math.max(0, cardRect.bottom - btnRect.bottom)
+
+  btn.style.opacity = '0'
+  btn.style.pointerEvents = 'none'
+
+  _onCardTransitionEnd(content, () => {
+    content.classList.add('collapsed')
+    btn.textContent = '≡'
+    btn.classList.remove('expanded')
+    btn.style.opacity = ''
+    btn.style.pointerEvents = ''
+  })
+  const ease = '0.45s cubic-bezier(0.4, 0, 0.2, 1)'
+  content.style.transition = `clip-path ${ease}, transform ${ease}`
+  content.style.clipPath   = `inset(0 ${r}px ${b}px 0 round 999px)`
+  content.style.transform  = `translate(${dx}px, ${dy}px)`
 }
 
 function closeDetail() {
+  _cancelCardAnim()
   document.getElementById('detail-view').classList.remove('open')
   document.getElementById('detail-top-controls').classList.remove('visible')
+  const infoBtn = document.getElementById('detail-info-btn')
+  infoBtn.classList.remove('visible', 'expanded')
+  infoBtn.style.opacity = ''
+  infoBtn.style.pointerEvents = ''
+  const content = document.getElementById('detail-content')
+  content.style.transition = ''
+  content.style.clipPath   = ''
+  content.style.transform  = ''
+  content.classList.add('collapsed')
 
   const detailVid = document.getElementById('detail-video-bg').querySelector('video')
   if (detailVid) detailVid.pause()
@@ -920,6 +1027,16 @@ function closeDetail() {
 document.getElementById('overlay-close-btn').addEventListener('click', closeOverlay)
 document.getElementById('detail-close-btn').addEventListener('click', closeDetail)
 document.getElementById('people-close-btn').addEventListener('click', closePeople)
+
+document.getElementById('detail-info-btn').addEventListener('click', () => {
+  const content = document.getElementById('detail-content')
+  const btn = document.getElementById('detail-info-btn')
+  if (content.classList.contains('collapsed')) {
+    expandCard(btn, content)
+  } else {
+    collapseCard(btn, content)
+  }
+})
 
 document.getElementById('location-overlay').addEventListener('click', e => {
   if (e.target.id === 'location-overlay') closeOverlay()
