@@ -1,3 +1,9 @@
+/* ── Design tokens ───────────────────────────────────────────────────────── */
+
+:root {
+  --edge: 2rem;
+}
+
 /* ── Reset ──────────────────────────────────────────────────────────────── */
 
 *, *::before, *::after {
@@ -38,7 +44,7 @@ html, body {
 #top-link {
   position: fixed;
   top: 1.75rem;
-  right: 2rem;
+  right: var(--edge);
   z-index: 65;
   display: flex;
   align-items: center;
@@ -137,6 +143,10 @@ html, body {
   transition: top 0.12s ease;
 }
 
+.scroll-indicator--hidden {
+  display: none;
+}
+
 .people-close-row {
   display: flex;
   justify-content: flex-end;
@@ -199,7 +209,7 @@ html, body {
   border: 1px solid rgba(200, 200, 200, 0.55);
   border-radius: 20px;
   padding: 3rem 3.5rem;
-  max-width: 460px;
+  max-width: 560px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -267,6 +277,15 @@ html, body {
   color: #999999;
   margin-bottom: 2.5rem;
   line-height: 1.7;
+}
+
+.acknowledgment {
+  font-size: 0.54rem;
+  font-weight: 300;
+  letter-spacing: 0.07em;
+  color: #aaaaaa;
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
 }
 
 .enter-btn {
@@ -386,7 +405,7 @@ html, body {
 .map-hint {
   position: fixed;
   top: 1.75rem;
-  left: 2rem;
+  left: var(--edge);
   z-index: 65;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   font-size: 0.68rem;
@@ -421,11 +440,23 @@ html, body {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(200, 200, 200, 0.5);
   border-radius: 20px;
-  padding: 2rem 2.5rem 2.5rem;
   width: 100%;
   max-width: 1100px;
   max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.overlay-scroll {
+  padding: 2rem 2.5rem 2.5rem;
+  height: 100%;
+  max-height: 90vh;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.overlay-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .overlay-header {
@@ -667,13 +698,28 @@ html, body {
   z-index: 1;
   overflow-y: auto;
   isolation: isolate;
+  scrollbar-width: none;
+}
+
+.detail-overlay::-webkit-scrollbar {
+  display: none;
+}
+
+/* Light variant for dark-background scroll indicators (detail view) */
+.scroll-indicator--light {
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 2;
+}
+
+.scroll-indicator--light .scroll-dot {
+  background: rgba(255, 255, 255, 0.55);
 }
 
 /* Top controls — lives outside #detail-view so position:fixed is viewport-relative */
 #detail-top-controls {
   position: fixed;
   top: 1.75rem;
-  right: 2rem;
+  right: var(--edge);
   z-index: 70;
   display: flex;
   align-items: center;
@@ -686,6 +732,17 @@ html, body {
 #detail-top-controls.visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Hide map hint and nav links while detail view is open */
+body:has(#detail-view.open) .map-hint,
+body:has(#detail-view.open) .map-ack,
+body:has(#detail-view.open) #project-link,
+body:has(#detail-view.open) #people-link,
+body:has(#detail-view.open) .nav-sep,
+body:has(#location-overlay.open) .map-hint,
+body:has(#location-overlay.open) .map-ack {
+  display: none !important;
 }
 
 /* Play/pause + close share a minimal style.
@@ -703,7 +760,7 @@ html, body {
   -webkit-backdrop-filter: blur(12px);
   border-radius: 999px;
   cursor: pointer;
-  padding: 0.9rem 1.1rem;
+  padding: 0.45rem 0.7rem;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
   mix-blend-mode: normal;
   transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
@@ -718,9 +775,9 @@ html, body {
 
 /* Editorial content — left-aligned column */
 .detail-content {
-  padding: 4.5rem 4vw 8rem;
-  margin: 0 2rem;
-  max-width: 780px;
+  padding: 2rem 2rem 3.5rem;
+  margin: 1.75rem var(--edge) 0;
+  max-width: 640px;
   background: rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -769,11 +826,16 @@ html, body {
 
 /* 2-column image placeholder grid */
 .detail-img-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
-  max-width: 640px;
+  display: block;
+  max-width: 480px;
   margin-bottom: 0.55rem;
+}
+
+.detail-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
 }
 
 /* 3:2 aspect-ratio image placeholder */
@@ -804,17 +866,27 @@ html, body {
 /* ── Responsive — mobile —───────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
+  :root {
+    --edge: 1.25rem;
+  }
+
+  #intro {
+    padding: 0 var(--edge);
+    justify-content: center;
+  }
+
   #location-overlay {
     align-items: flex-end;
-    padding: 0;
+    padding: 0 var(--edge) var(--edge);
   }
 
   .overlay-panel {
     max-height: 85vh;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    padding: 1.5rem 1.25rem 2rem;
+  }
+
+  .overlay-scroll {
+    padding: 1.5rem 2.5rem 2rem 1.5rem;
+    max-height: 85vh;
   }
 
   .video-grid {
@@ -830,8 +902,8 @@ html, body {
   }
 
   .detail-content {
-    padding: 3rem 1.5rem 5rem;
-    margin: 0 1rem;
+    padding: 2rem 1.5rem 4rem;
+    margin: 4rem var(--edge) 0;
   }
 
   .detail-img-grid {
@@ -840,7 +912,6 @@ html, body {
 
   #detail-top-controls {
     top: 1rem;
-    right: 1.25rem;
   }
 }
 
@@ -903,8 +974,24 @@ html, body {
 }
 
 .maplibregl-ctrl-bottom-right {
-  bottom: 14px !important;
-  right: 14px !important;
+  bottom: 1.75rem !important;
+  right: var(--edge) !important;
+}
+
+/* Bottom-left map acknowledgment */
+.map-ack {
+  position: fixed;
+  bottom: 1.75rem;
+  left: var(--edge);
+  z-index: 65;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.52rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  color: #bbbbbb;
+  pointer-events: none;
+  max-width: 28ch;
+  line-height: 1.5;
 }
 
 /* ── Animations ─────────────────────────────────────────────────────────── */

@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resonant Ecologies</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg"/>
+  <link rel="apple-touch-icon" href="icon.svg"/>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
@@ -35,6 +37,7 @@
       <div class="divider"></div>
       <p class="method" id="method-text"></p>
 
+      <p class="acknowledgment">Resonant Ecologies was funded by the University of Arizona's Arts Research and Resilience Initiative (ARRI)</p>
       <button class="enter-btn" id="enter-btn">enter</button>
 
     </div>
@@ -43,17 +46,22 @@
   <!-- Location overlay — floats over map when a watercourse is selected -->
   <div id="location-overlay">
     <div class="overlay-panel">
-      <div class="overlay-header">
-        <div class="overlay-title-group">
-          <p class="overlay-watershed" id="ov-watershed"></p>
-          <h2 class="overlay-name" id="ov-name"></h2>
-          <p class="overlay-desc" id="ov-desc"></p>
-          <p class="overlay-subtitle" id="ov-subtitle"></p>
-          <div class="overlay-body" id="ov-body"></div>
-        </div>
-        <button class="overlay-close-btn" id="overlay-close-btn">✕</button>
+      <div class="scroll-indicator" id="overlay-indicator">
+        <div class="scroll-dot" id="overlay-dot"></div>
       </div>
-      <div class="video-grid" id="video-grid"></div>
+      <div class="overlay-scroll" id="overlay-scroll">
+        <div class="overlay-header">
+          <div class="overlay-title-group">
+            <p class="overlay-watershed" id="ov-watershed"></p>
+            <h2 class="overlay-name" id="ov-name"></h2>
+            <p class="overlay-desc" id="ov-desc"></p>
+            <p class="overlay-subtitle" id="ov-subtitle"></p>
+            <div class="overlay-body" id="ov-body"></div>
+          </div>
+          <button class="overlay-close-btn" id="overlay-close-btn">✕</button>
+        </div>
+        <div class="video-grid" id="video-grid"></div>
+      </div>
     </div>
   </div>
 
@@ -66,8 +74,11 @@
   <!-- Detail view — full-screen video with overlaid text/image content -->
   <div id="detail-view">
     <div id="detail-video-bg"></div>
-    <div class="detail-overlay">
+    <div class="detail-overlay" id="detail-overlay">
       <div class="detail-content" id="detail-content"></div>
+    </div>
+    <div class="scroll-indicator scroll-indicator--light" id="detail-indicator">
+      <div class="scroll-dot" id="detail-dot"></div>
     </div>
   </div>
 
@@ -88,6 +99,7 @@
           <p class="author-bio">Dr. Ilayda Altuntas Nott is an artist, researcher, and Assistant Professor of Art &amp; Visual Culture Education at the University of Arizona. Her work brings together sound, listening, environmental experience, and artmaking to explore how people connect with place, memory, place, and material environments through sensory experience and creative practice.</p>
           <p class="author-bio">She is the author of Sounding Art Practice as Research (SAPAR), a practice-related methodology grounded in field recording, listening practices, movement, and audiovisual translation as forms of inquiry. Through hydrophones, contact microphones, ultrasonic recordings, moving image, and abstract visual systems, her projects explore socio-cultural relationships between environmental resonance, infrastructure, vibration and lived experience.</p>
           <p class="author-bio">Resonant Ecologies continues this practice through site-specific recordings collected across Southern Arizona, transforming environmental sounds and material vibrations into moving geometric forms shaped by rhythm, drift, pulse, distortion, and hydrological movement.</p>
+          <p class="author-bio"><a class="author-link" href="https://www.ilaydaaltuntas.com/" target="_blank" rel="noopener">ilaydaaltuntas.com</a></p>
         </div>
 
         <div class="author-divider"></div>

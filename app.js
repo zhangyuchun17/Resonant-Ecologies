@@ -180,9 +180,9 @@ function getZoomedInPadding() {
 
 function getResponsivePadding() {
   const w = window.innerWidth
-  if (w >= 1024) return { top: 80, bottom: 80, left: 120, right: 120 }
-  if (w >= 768)  return { top: 60, bottom: 60, left: 80,  right: 80  }
-  return                 { top: 40, bottom: 40, left: 40,  right: 40  }
+  if (w >= 1024) return { top: 80, bottom: 80, left: 320, right: 80 }
+  if (w >= 768)  return { top: 60, bottom: 60, left: 200, right: 60 }
+  return                 { top: 40, bottom: 40, left: 40,  right: 40 }
 }
 
 function initMap() {
@@ -433,6 +433,11 @@ function startAnimation() {
     hint.className = 'map-hint'
     hint.textContent = 'select a watercourse'
     document.body.appendChild(hint)
+
+    const ack = document.createElement('p')
+    ack.className = 'map-ack'
+    ack.textContent = 'Funded by the University of Arizona\'s Arts Research and Resilience Initiative (ARRI)'
+    document.body.appendChild(ack)
   })
 }
 
@@ -468,6 +473,7 @@ const projectLink = document.getElementById('project-link')
       setTimeout(() => { intro.style.display = 'none' }, 600)
       projectLink.style.display = ''
       peopleLink.style.display = ''
+      document.querySelectorAll('.map-hint, .map-ack').forEach(el => el.style.display = '')
 
       if (map.loaded()) {
         startAnimation()
@@ -508,6 +514,11 @@ function openLocation(id) {
   document.querySelector(`.location-label[data-loc-id="${id}"]`)?.classList.add('active')
 
   document.getElementById('location-overlay').classList.add('open')
+  document.getElementById('overlay-scroll').scrollTop = 0
+  requestAnimationFrame(() => {
+    refreshScrollIndicator('overlay-scroll', 'overlay-indicator')
+    updateOverlayDot()
+  })
 }
 
 function closeOverlay() {
@@ -520,17 +531,28 @@ function closeOverlay() {
 
 function openPeople() {
   document.getElementById('people-overlay').classList.add('open')
-  updatePeopleDot()
+  requestAnimationFrame(() => {
+    refreshScrollIndicator('people-scroll', 'people-indicator')
+    updatePeopleDot()
+  })
 }
 
 function closePeople() {
   document.getElementById('people-overlay').classList.remove('open')
 }
 
-function updatePeopleDot() {
-  const scrollEl = document.getElementById('people-scroll')
-  const indicator = document.getElementById('people-indicator')
-  const dot = document.getElementById('people-dot')
+function refreshScrollIndicator(scrollElId, indicatorId) {
+  const scrollEl = document.getElementById(scrollElId)
+  const indicator = document.getElementById(indicatorId)
+  if (!scrollEl || !indicator) return
+  const overflows = scrollEl.scrollHeight > scrollEl.clientHeight + 2
+  indicator.classList.toggle('scroll-indicator--hidden', !overflows)
+}
+
+function updateScrollDot(scrollElId, indicatorId, dotId) {
+  const scrollEl = document.getElementById(scrollElId)
+  const indicator = document.getElementById(indicatorId)
+  const dot = document.getElementById(dotId)
   if (!scrollEl || !indicator || !dot) return
   const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
   const ratio = maxScroll > 0 ? scrollEl.scrollTop / maxScroll : 0
@@ -539,7 +561,13 @@ function updatePeopleDot() {
   dot.style.top = (ratio * (trackH - dotH)) + 'px'
 }
 
+function updatePeopleDot()  { updateScrollDot('people-scroll',  'people-indicator',  'people-dot')  }
+function updateOverlayDot() { updateScrollDot('overlay-scroll', 'overlay-indicator', 'overlay-dot') }
+function updateDetailDot()  { updateScrollDot('detail-overlay', 'detail-indicator',  'detail-dot')  }
+
 document.getElementById('people-scroll').addEventListener('scroll', updatePeopleDot)
+document.getElementById('overlay-scroll').addEventListener('scroll', updateOverlayDot)
+document.getElementById('detail-overlay').addEventListener('scroll', updateDetailDot)
 
 function showIntro() {
   const intro = document.getElementById('intro')
@@ -554,6 +582,7 @@ function showIntro() {
   intro.style.pointerEvents = 'auto'
   projectLink.style.display = 'none'
   peopleLink.style.display = 'none'
+  document.querySelectorAll('.map-hint, .map-ack').forEach(el => el.style.display = 'none')
   closePeople()
 
   locationOverlay.classList.remove('open')
@@ -703,7 +732,78 @@ const IMG_PLACEHOLDER_SVG = `<svg viewBox="0 0 3 2" xmlns="http://www.w3.org/200
   <circle cx="1.5" cy="1" r="0.11" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="0.028"/>
 </svg>`
 
-const TEXT_PH = 'text placeholder text placeholder text placeholder text placeholder text placeholder text placeholder text placeholder text placeholder text placeholder text placeholder'
+const DETAIL_CONTENT = {
+  'Agua Caliente': {
+    air: {
+      text: 'Air recordings captured birds, insects, and continuous ecological activity surrounding the spring-fed environment. These sounds generated slowly shifting circular forms that expand, drift, and overlap, reflecting the site\'s biological density and constant movement.',
+      img: 'media/Agua Caliente/Air/Details/AguaAir.jpg'
+    },
+    land: {
+      text: 'Contact microphones attached to trees and surrounding materials revealed subtle internal vibrations moving through living surfaces. These recordings became morphing resonant forms whose movement reflects growth, flexibility, and organic response.',
+      img: 'media/Agua Caliente/Land/Details/AguaLand.jpg'
+    },
+    water: {
+      text: 'Hydrophone recordings captured submerged movement, turbulence, and the layered textures of spring water. The visual translation uses flowing line systems, distortion, and rhythmic motion to reflect the site\'s active hydrological presence.',
+      img: null
+    }
+  },
+  'Biosphere 2 Ocean': {
+    air: {
+      text: 'Air recordings documented the sounds of enclosed ecological systems, circulation, and human-designed environmental conditions. These sounds generated structured geometric forms whose movement reflects repetition, containment, and environmental control.',
+      img: 'media/Biosphere2 Ocean/Air/Details/biosphereAir.jpg'
+    },
+    land: {
+      text: 'Contact microphone recordings captured low resonant vibrations traveling through the architecture supporting the ocean system. The resulting forms move through slow rhythmic pulses, resembling a mechanical heartbeat circulating through the built environment.',
+      img: 'media/Biosphere2 Ocean/Land/Details/BiosphereLand.jpg'
+    },
+    water: {
+      text: 'Hydrophone recordings captured circulating water systems and aquatic activity within the ocean environment. These recordings generated oscillating visual structures shaped by repetition, flow, and contained movement, reflecting the relationship between ecological life and technological design.',
+      img: 'media/Biosphere2 Ocean/Water/Details/BisophereWater.jpg'
+    }
+  },
+  'Pantano Wash': {
+    air: {
+      text: 'Recorded beneath a bridge corridor, the air recordings captured bat activity, passing bicycles, distant traffic, and the layered sounds of urban movement. These recordings generated sparse pulses and circular forms that appear intermittently across the visual field, reflecting the fragmented ecological activity of the site.',
+      img: null
+    },
+    land: {
+      text: 'Contact microphones attached to metal infrastructure revealed low structural vibrations traveling through the bridge environment. The visual translations became vibrating geometric structures shaped by resonance, pressure, and repeated infrastructural movement.',
+      img: null
+    },
+    water: {
+      text: 'Although surface water was absent during recording, the wash remains defined by seasonal flow. This absence was translated into faint drifting line systems that move slowly across the screen, suggesting latent hydrological presence and the memory of water within the dry wash.',
+      img: null
+    }
+  },
+  'Rillito River': {
+    air: {
+      text: 'The air recordings captured wind movement and intermittent ecological activity across the open riverbed. These sounds generated sparse circular systems and drifting pulses, emphasizing openness, distance, and the fragmented rhythms of the dry wash.',
+      img: 'media/Rillito River/Air/Details/RillitoAir.jpg'
+    },
+    land: {
+      text: 'Contact microphone recordings revealed low-frequency vibrations traveling through the landscape and surrounding structures. The resulting forms remain grounded and restrained, responding slowly to shifts in resonance and material contact.',
+      img: 'media/Rillito River/Land/Details/RillitoLand.jpg'
+    },
+    water: {
+      text: 'No visible water was present during recording. Rather than representing flow directly, the visual system responds to absence through faint linear movement and suspended motion, reflecting the residual presence of an intermittent river system.',
+      img: 'media/Rillito River/Water/Details/RillitoWater.jpg'
+    }
+  },
+  'Santa Cruz River': {
+    air: {
+      text: 'The air recordings captured wind movement, insects, and the shifting sonic textures surrounding the river corridor. In the visual translation, these sounds became expanding circular forms that respond to changes in density, movement, and spatial rhythm, reflecting the river\'s continuous interaction with its surrounding environment.',
+      img: 'media/Santa Cruz River/Air/Details/SantaCruzAir.jpg'
+    },
+    land: {
+      text: 'Contact microphone recordings collected from river materials revealed subtle vibrations traveling through wood, sediment, and physical surfaces. These recordings were translated into resonant geometric structures that expand and contract through vibration, emphasizing the material presence of the river landscape.',
+      img: 'media/Santa Cruz River/Land/Details/santacruzland.jpg'
+    },
+    water: {
+      text: 'Hydrophone recordings captured the movement of flowing water beneath the surface. The resulting visual system uses layered horizontal motion and rhythmic expansion to reflect current, flow, and the continuous movement of water through the river system.',
+      video: 'media/Santa Cruz River/Water/Details/SantaCruzWater2.mp4'
+    }
+  }
+}
 
 function openDetail(locName, category, mediaSrc, startTime = 0) {
   if (currentGridVideo) currentGridVideo.pause()
@@ -750,6 +850,8 @@ function openDetail(locName, category, mediaSrc, startTime = 0) {
   const content = document.getElementById('detail-content')
   content.innerHTML = ''
 
+  const detail = DETAIL_CONTENT[locName]?.[category]
+
   const cat = document.createElement('p')
   cat.className = 'detail-cat'
   cat.textContent = category
@@ -763,29 +865,41 @@ function openDetail(locName, category, mediaSrc, startTime = 0) {
 
   const para1 = document.createElement('p')
   para1.className = 'detail-para'
-  para1.textContent = TEXT_PH
+  para1.textContent = detail?.text ?? ''
 
-  const imgGrid = document.createElement('div')
-  imgGrid.className = 'detail-img-grid'
-  ;[0, 1].forEach(() => {
+  const imgWrap = document.createElement('div')
+  imgWrap.className = 'detail-img-grid'
+  if (detail?.img) {
+    const img = document.createElement('img')
+    img.src = detail.img
+    img.className = 'detail-img'
+    img.alt = `${locName} ${category}`
+    imgWrap.appendChild(img)
+  } else if (detail?.video) {
+    const vid = document.createElement('video')
+    vid.src = detail.video
+    vid.className = 'detail-img'
+    vid.muted = true
+    vid.autoplay = true
+    vid.loop = true
+    vid.playsInline = true
+    imgWrap.appendChild(vid)
+  } else {
     const ph = document.createElement('div')
     ph.className = 'detail-img-ph'
     ph.innerHTML = IMG_PLACEHOLDER_SVG
-    imgGrid.appendChild(ph)
-  })
+    imgWrap.appendChild(ph)
+  }
 
-  const caption = document.createElement('p')
-  caption.className = 'detail-caption'
-  caption.textContent = '[ image placeholder ]'
+  content.append(cat, loc, hr, para1, imgWrap)
 
-  const para2 = document.createElement('p')
-  para2.className = 'detail-para'
-  para2.textContent = TEXT_PH
-
-  content.append(cat, loc, hr, para1, imgGrid, caption, para2)
-
+  document.getElementById('detail-overlay').scrollTop = 0
   document.getElementById('detail-view').classList.add('open')
   document.getElementById('detail-top-controls').classList.add('visible')
+  requestAnimationFrame(() => {
+    refreshScrollIndicator('detail-overlay', 'detail-indicator')
+    updateDetailDot()
+  })
 }
 
 function closeDetail() {
