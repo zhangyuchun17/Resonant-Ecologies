@@ -487,6 +487,16 @@ const projectLink = document.getElementById('project-link')
 
 // ── Location overlay ──────────────────────────────────────────────────────
 
+function setMapInteractions(enabled) {
+  if (!map) return
+  const method = enabled ? 'enable' : 'disable'
+  map.dragPan[method]()
+  map.scrollZoom[method]()
+  map.doubleClickZoom[method]()
+  map.touchZoomRotate[method]()
+  map.keyboard[method]()
+}
+
 function openLocation(id) {
   const loc = LOCATIONS.find(l => l.id === id)
   if (!loc) return
@@ -509,6 +519,7 @@ function openLocation(id) {
 
   document.getElementById('location-overlay').classList.add('open')
   document.getElementById('overlay-scroll').scrollTop = 0
+  setMapInteractions(false)
   requestAnimationFrame(() => {
     refreshScrollIndicator('overlay-scroll', 'overlay-indicator')
     updateOverlayDot()
@@ -521,6 +532,7 @@ function closeOverlay() {
   overlay.querySelectorAll('video').forEach(v => { v.pause(); v.muted = true })
   currentGridVideo = null
   document.querySelectorAll('.location-label').forEach(el => el.classList.remove('active'))
+  setMapInteractions(true)
 }
 
 function openPeople() {

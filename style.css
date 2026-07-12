@@ -441,15 +441,17 @@ html, body {
 /* ── Location overlay ───────────────────────────────────────────────────── */
 
 #location-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: 75;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   opacity: 0;
   pointer-events: none;
+  overflow: hidden;
+  touch-action: none;
   transition: opacity 0.4s ease;
 }
 
@@ -467,13 +469,21 @@ html, body {
   max-height: 90vh;
   overflow: hidden;
   position: relative;
+  display: flex;
+  min-height: 0;
+  touch-action: pan-y;
 }
 
 .overlay-scroll {
   padding: 2rem 2.5rem 2.5rem;
-  height: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: inherit;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   scrollbar-width: none;
 }
 
@@ -792,9 +802,10 @@ body:has(#detail-view.open) .nav-sep {
   display: none !important;
 }
 
-/* Hide map hint and ack when detail view or location overlay is open */
+/* Hide map labels/nav when detail view or location overlay is open */
 body:has(#detail-view.open) .map-hint,
 body:has(#detail-view.open) .map-ack,
+body:has(#location-overlay.open) #top-link,
 body:has(#location-overlay.open) .map-hint,
 body:has(#location-overlay.open) .map-ack {
   display: none !important;
@@ -975,12 +986,18 @@ body:has(#location-overlay.open) .map-ack {
   }
 
   .overlay-panel {
-    max-height: 85vh;
+    max-height: min(85vh, calc(100dvh - var(--edge)));
   }
 
   .overlay-scroll {
     padding: 1.5rem 2.5rem 2rem 1.5rem;
-    max-height: 85vh;
+    max-height: inherit;
+  }
+
+  .overlay-close-btn {
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
 
   .video-grid {
