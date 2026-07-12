@@ -572,9 +572,48 @@ function updatePeopleDot()  { updateScrollDot('people-scroll',  'people-indicato
 function updateOverlayDot() { updateScrollDot('overlay-scroll', 'overlay-indicator', 'overlay-dot') }
 function updateDetailDot()  { updateScrollDot('detail-overlay', 'detail-indicator',  'detail-dot')  }
 
+function refreshTouchScroll(scrollElId) {
+  const scrollEl = document.getElementById(scrollElId)
+  if (!scrollEl) return
+  scrollEl.style.overflowY = 'hidden'
+  scrollEl.offsetHeight
+  scrollEl.style.overflowY = ''
+}
+
 document.getElementById('people-scroll').addEventListener('scroll', updatePeopleDot)
 document.getElementById('overlay-scroll').addEventListener('scroll', updateOverlayDot)
 document.getElementById('detail-overlay').addEventListener('scroll', updateDetailDot)
+
+function enableTouchScroll(scrollElId, onScroll) {
+  const scrollEl = document.getElementById(scrollElId)
+  if (!scrollEl) return
+
+  let startY = 0
+  let startScrollTop = 0
+  let moved = false
+
+  scrollEl.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return
+    startY = e.touches[0].clientY
+    startScrollTop = scrollEl.scrollTop
+    moved = false
+  }, { passive: true })
+
+  scrollEl.addEventListener('touchmove', e => {
+    if (e.touches.length !== 1) return
+
+    const dy = startY - e.touches[0].clientY
+    if (Math.abs(dy) < 2 && !moved) return
+
+    moved = true
+    scrollEl.scrollTop = startScrollTop + dy
+    if (onScroll) onScroll()
+    e.preventDefault()
+  }, { passive: false })
+}
+
+enableTouchScroll('overlay-scroll', updateOverlayDot)
+enableTouchScroll('people-scroll', updatePeopleDot)
 
 function showIntro() {
   const intro = document.getElementById('intro')
@@ -1038,6 +1077,7 @@ function closeDetail() {
     currentGridVideo = null
     setMapInteractions(false)
     requestAnimationFrame(() => {
+      refreshTouchScroll('overlay-scroll')
       refreshScrollIndicator('overlay-scroll', 'overlay-indicator')
       updateOverlayDot()
     })
