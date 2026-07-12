@@ -38,6 +38,8 @@ html, body {
   align-items: center;
   justify-content: flex-start;
   padding-left: 8vw;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   transition: opacity 0.6s ease;
 }
 
@@ -211,9 +213,16 @@ html, body {
   padding: 3rem 3.5rem;
   max-width: 560px;
   width: 100%;
+  max-height: calc(100dvh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: none;
   display: flex;
   flex-direction: column;
   animation: fadeIn 0.7s ease forwards;
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
 }
 
 .lang-toggle {
@@ -926,8 +935,38 @@ body:has(#location-overlay.open) .map-ack {
   }
 
   #intro {
-    padding: 0 var(--edge);
+    align-items: flex-start;
+    padding: 4rem var(--edge) 1.25rem;
     justify-content: center;
+  }
+
+  .panel {
+    max-height: calc(100dvh - 5.25rem);
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .lang-toggle {
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.64rem;
+    line-height: 1.75;
+    margin-bottom: 1.35rem;
+  }
+
+  .method {
+    margin-bottom: 1.75rem;
+  }
+
+  .acknowledgment {
+    margin-bottom: 1.25rem;
   }
 
   #location-overlay {

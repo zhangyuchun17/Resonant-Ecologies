@@ -115,4 +115,5 @@ The `scripts/` directory contains PowerShell scripts used during data preprocess
 - Responsive layout with mobile breakpoints at 768 px
 
 ## License
+
 This project is part of an academic research initiative. Please contact the authors for usage permissions.
