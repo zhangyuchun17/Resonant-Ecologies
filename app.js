@@ -815,7 +815,6 @@ const DETAIL_CONTENT = {
 function openDetail(locationId, locName, category, mediaSrc, startTime = 0) {
   returnLocationId = locationId
   if (currentGridVideo) currentGridVideo.pause()
-  closeOverlay()
   setMapInteractions(false)
 
   // ── Video background ──
@@ -1032,13 +1031,21 @@ function closeDetail() {
   const detailVid = document.getElementById('detail-video-bg').querySelector('video')
   if (detailVid) detailVid.pause()
 
-  currentGridVideo = null
   const locationId = returnLocationId
   returnLocationId = null
 
-  if (locationId) {
+  if (document.getElementById('location-overlay').classList.contains('open')) {
+    currentGridVideo = null
+    setMapInteractions(false)
+    requestAnimationFrame(() => {
+      refreshScrollIndicator('overlay-scroll', 'overlay-indicator')
+      updateOverlayDot()
+    })
+  } else if (locationId) {
+    currentGridVideo = null
     openLocation(locationId)
   } else {
+    currentGridVideo = null
     setMapInteractions(true)
   }
 }
