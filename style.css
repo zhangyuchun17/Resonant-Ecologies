@@ -695,7 +695,7 @@ html, body {
 #detail-view {
   position: absolute;
   inset: 0;
-  z-index: 60;
+  z-index: 90;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease;
@@ -752,7 +752,7 @@ html, body {
   position: fixed;
   top: 1.75rem;
   right: var(--edge);
-  z-index: 70;
+  z-index: 95;
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -770,7 +770,7 @@ html, body {
   position: fixed;
   top: 1.75rem;
   left: var(--edge);
-  z-index: 70;
+  z-index: 95;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease;
@@ -816,10 +816,18 @@ body:has(#location-overlay.open) .map-ack {
 #detail-info-btn,
 #detail-play-btn,
 #detail-close-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
+  line-height: 1;
   color: #ffffff;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -827,7 +835,7 @@ body:has(#location-overlay.open) .map-ack {
   -webkit-backdrop-filter: blur(12px);
   border-radius: 999px;
   cursor: pointer;
-  padding: 0.45rem 0.7rem;
+  padding: 0;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
   mix-blend-mode: normal;
   transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
@@ -980,6 +988,11 @@ body:has(#location-overlay.open) .map-ack {
     margin-bottom: 1.25rem;
   }
 
+  #overlay-indicator,
+  #people-indicator {
+    display: none !important;
+  }
+
   #location-overlay {
     align-items: flex-end;
     padding: 0 var(--edge) var(--edge);
@@ -1022,6 +1035,10 @@ body:has(#location-overlay.open) .map-ack {
   }
 
   #detail-top-controls {
+    top: 1rem;
+  }
+
+  #detail-info-btn {
     top: 1rem;
   }
 }

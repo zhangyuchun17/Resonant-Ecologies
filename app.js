@@ -147,6 +147,7 @@ let currentLang = 'en'
 let map = null
 let animationStarted = false
 let currentGridVideo = null  // tracks the currently active grid video
+let returnLocationId = null
 
 // ── Map ───────────────────────────────────────────────────────────────────
 
@@ -615,7 +616,7 @@ function buildVideoGrid(locationId, locName) {
 
   CATEGORIES.forEach(category => {
     const media = locationMedia[category] || null
-    const card = buildVideoCard(locName, category, media)
+    const card = buildVideoCard(locationId, locName, category, media)
     grid.appendChild(card)
     cards.push(card)
   })
@@ -628,7 +629,7 @@ function buildVideoGrid(locationId, locName) {
 
     wrapper.addEventListener('click', () => {
       if (!video) {
-        openDetail(locName, card.dataset.category, null, 0)
+        openDetail(locationId, locName, card.dataset.category, null, 0)
         return
       }
 
@@ -668,7 +669,7 @@ function buildVideoGrid(locationId, locName) {
 
 // ── Video card ────────────────────────────────────────────────────────────
 
-function buildVideoCard(locName, category, media) {
+function buildVideoCard(locationId, locName, category, media) {
   const card = document.createElement('div')
   card.className = 'video-card'
   card.dataset.category = category
@@ -718,7 +719,7 @@ function buildVideoCard(locName, category, media) {
     e.stopPropagation()
     const gridVideo = card.querySelector('video')
     const startTime = gridVideo ? gridVideo.currentTime : 0
-    openDetail(locName, category, media ? media.src : null, startTime)
+    openDetail(locationId, locName, category, media ? media.src : null, startTime)
   })
 
   meta.appendChild(catSpan)
@@ -811,8 +812,11 @@ const DETAIL_CONTENT = {
   }
 }
 
-function openDetail(locName, category, mediaSrc, startTime = 0) {
+function openDetail(locationId, locName, category, mediaSrc, startTime = 0) {
+  returnLocationId = locationId
   if (currentGridVideo) currentGridVideo.pause()
+  closeOverlay()
+  setMapInteractions(false)
 
   // ── Video background ──
   const bg = document.getElementById('detail-video-bg')
@@ -1028,9 +1032,14 @@ function closeDetail() {
   const detailVid = document.getElementById('detail-video-bg').querySelector('video')
   if (detailVid) detailVid.pause()
 
-  if (currentGridVideo) {
-    currentGridVideo.muted = false
-    currentGridVideo.play().catch(() => {})
+  currentGridVideo = null
+  const locationId = returnLocationId
+  returnLocationId = null
+
+  if (locationId) {
+    openLocation(locationId)
+  } else {
+    setMapInteractions(true)
   }
 }
 
