@@ -74,29 +74,29 @@ const LOCATIONS = [
 // null entry = no media yet; placeholder SVG is shown instead.
 const MEDIA = {
   'santa-cruz': {
-    air:   { src: 'media/Santa Cruz River/Air/scrair1.mp4' },
-    land: { src: 'media/Santa Cruz River/Land/santacruzland.mp4' },
-    water: { src: 'media/Santa Cruz River/Water/scrwater.mp4' }
+    air:   { src: 'media/Santa Cruz River/Air/scrair1.mp4', poster: 'media/posters/santa-cruz-air.jpg' },
+    land: { src: 'media/Santa Cruz River/Land/santacruzland.mp4', poster: 'media/posters/santa-cruz-land.jpg' },
+    water: { src: 'media/Santa Cruz River/Water/scrwater.mp4', poster: 'media/posters/santa-cruz-water.jpg' }
   },
   'rillito': {
-    air:   { src: 'media/Rillito River/Air/rillito_air_ultrasonic_processed.mp4' },
-    land: { src: 'media/Rillito River/Land/rillito_land_processed.mp4' },
-    water: { src: 'media/Rillito River/Water/rillito_water_memory.mp4' }
+    air:   { src: 'media/Rillito River/Air/rillito_air_ultrasonic_processed.mp4', poster: 'media/posters/rillito-air.jpg' },
+    land: { src: 'media/Rillito River/Land/rillito_land_processed.mp4', poster: 'media/posters/rillito-land.jpg' },
+    water: { src: 'media/Rillito River/Water/rillito_water_memory.mp4', poster: 'media/posters/rillito-water.jpg' }
   },
   'agua-caliente': {
-    air:   { src: 'media/Agua Caliente/Air/aguacalienteair_air_processed.mp4' },
-    land: { src: 'media/Agua Caliente/Land/aguacalinteland2.mp4' },
-    water: { src: 'media/Agua Caliente/Water/aguacaliente_water_processed.mp4' }
+    air:   { src: 'media/Agua Caliente/Air/aguacalienteair_air_processed.mp4', poster: 'media/posters/agua-caliente-air.jpg' },
+    land: { src: 'media/Agua Caliente/Land/aguacalinteland2.mp4', poster: 'media/posters/agua-caliente-land.jpg' },
+    water: { src: 'media/Agua Caliente/Water/aguacaliente_water_processed.mp4', poster: 'media/posters/agua-caliente-water.jpg' }
   },
   'pantano': {
-    air:   { src: 'media/Pantano Wash/Air/pantanoultrasound2_1.mp4' },
-    land: { src: 'media/Pantano Wash/Land/pantanoearth1.mp4' },
-    water: { src: 'media/Pantano Wash/Water/pantano_water_memory_.mp4' }
+    air:   { src: 'media/Pantano Wash/Air/pantanoultrasound2_1.mp4', poster: 'media/posters/pantano-air.jpg' },
+    land: { src: 'media/Pantano Wash/Land/pantanoearth1.mp4', poster: 'media/posters/pantano-land.jpg' },
+    water: { src: 'media/Pantano Wash/Water/pantano_water_memory_.mp4', poster: 'media/posters/pantano-water.jpg' }
   },
   'biosphere2': {
-    air:   { src: 'media/Biosphere2 Ocean/Air/BiosphereOceanWaveGenerator1.mp4' },
-    land: { src: 'media/Biosphere2 Ocean/Land/Land.mp4' },
-    water: { src: 'media/Biosphere2 Ocean/Water/coral sounds biopshere.mp4' }
+    air:   { src: 'media/Biosphere2 Ocean/Air/BiosphereOceanWaveGenerator1.mp4', poster: 'media/posters/biosphere2-air.jpg' },
+    land: { src: 'media/Biosphere2 Ocean/Land/Land.mp4', poster: 'media/posters/biosphere2-land.jpg' },
+    water: { src: 'media/Biosphere2 Ocean/Water/coral sounds biopshere.mp4', poster: 'media/posters/biosphere2-water.jpg' }
   }
 }
 
@@ -614,6 +614,7 @@ function enableTouchScroll(scrollElId, onScroll) {
 
 enableTouchScroll('overlay-scroll', updateOverlayDot)
 enableTouchScroll('people-scroll', updatePeopleDot)
+enableTouchScroll('intro-panel')
 
 function showIntro() {
   const intro = document.getElementById('intro')
@@ -626,6 +627,8 @@ function showIntro() {
   intro.style.display = ''
   intro.style.opacity = '1'
   intro.style.pointerEvents = 'auto'
+  refreshTouchScroll('intro-panel')
+  document.getElementById('intro-panel').scrollTop = 0
   projectLink.style.display = 'none'
   peopleLink.style.display = 'none'
   document.querySelectorAll('.map-title, .map-hint, .map-ack').forEach(el => el.style.display = 'none')
@@ -723,8 +726,20 @@ function buildVideoCard(locationId, locName, category, media) {
     video.muted = true
     video.loop = true
     video.playsInline = true
-    video.preload = 'metadata'
+    video.preload = 'auto'
+    if (media.poster) {
+      video.poster = media.poster
+      video.classList.add('preview-ready')
+    }
+    video.addEventListener('loadedmetadata', () => {
+      if (video.duration > 0) video.currentTime = Math.min(0.1, video.duration)
+    }, { once: true })
+    video.addEventListener('loadeddata', () => {
+      video.classList.add('preview-ready')
+      video.pause()
+    }, { once: true })
     wrapper.appendChild(video)
+    video.load()
   } else {
     const ph = document.createElement('div')
     ph.className = 'video-placeholder'
